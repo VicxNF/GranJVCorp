@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = ['codigo_seguimiento', 'descripcion']
+        fields = ['usuario', 'estado', 'direccion_envio', 'metodo_pago', 'total', 'codigo_seguimiento']
 
 class CustomUserCreationForm(UserCreationForm):
     def clean(self):
