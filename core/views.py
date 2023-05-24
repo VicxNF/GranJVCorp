@@ -17,14 +17,19 @@ def mostrar_pedidos(request):
     return render(request, 'core/mostrar_pedidos.html', {'pedidos': pedidos})
 
 def agregar_pedido(request):
-    if request.method == 'POST':
-        form = PedidoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('mostrar_pedidos')
-    else:
-        form = PedidoForm()
-    return render(request, 'core/agregar_pedido.html', {'form': form})
+    datos = {
+        'form' : PedidoForm()
+    }
+
+    if request.method== 'POST' :
+        formulario = PedidoForm(request.POST)
+
+        if formulario.is_valid:
+            
+            formulario.save()
+            datos['mensaje'] = "Registrado Correctamente"
+
+    return render(request, 'core/agregar_pedido.html', datos)
 
 
     
@@ -64,3 +69,23 @@ def administrador(request):
         'pedidos': pedidos
     }
     return render(request, 'core/administrador.html', datos)
+
+def modificar_pedido(request,codigo):
+    pedido = Pedido.objects.get(codigo_seguimiento=codigo)
+
+    datos = {
+        'form': PedidoForm(instance=pedido)
+    }
+    if request.method== 'POST':
+        formulario = PedidoForm(data=request.POST,instance=pedido)
+        if formulario.is_valid:
+            formulario.save()
+            datos['mensaje'] = "Modificacion exitosa"
+
+    return render(request, 'core/modificar_pedido.html', datos)
+
+def eliminar_pedido(request, codigo):
+    pedido = Pedido.objects.get(codigo_seguimiento=codigo)
+    pedido.delete()
+
+    return redirect(to="mostrar_pedidos")

@@ -9,4 +9,6 @@ urlpatterns = [
     path('login/', iniciar_sesion, name='login'),
     path('register/', register, name='register'),
     path('administrador/', login_required(administrador), name='administrador'),
+    path('modificar-pedido/<codigo>', modificar_pedido, name="modificar_pedido"),
+    path('eliminar-pedido/<codigo>', eliminar_pedido, name="eliminar_pedido"),
 ]

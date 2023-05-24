@@ -2,8 +2,9 @@ from django import forms
 from .models import Pedido
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
-class PedidoForm(forms.ModelForm):
+class PedidoForm(ModelForm):
     class Meta:
         model = Pedido
         fields = ['usuario', 'estado', 'direccion_envio', 'metodo_pago', 'total', 'codigo_seguimiento']
@@ -33,3 +34,4 @@ class CustomUserCreationForm(UserCreationForm):
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError('El nombre de usuario ya está en uso. Por favor, elija otro.')
         return username
+
