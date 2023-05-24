@@ -1,0 +1,54 @@
+/* admin.css */
+
+/* Estilos generales */
+.admin-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .admin-sidebar {
+    width: 20%;
+    padding: 20px;
+    color: #fff;
+  }
+  
+  .admin-content {
+    width: 80%;
+    padding: 20px;
+  }
+  
+  /* Estilos de colores relacionados con la música */
+  .bg-dark {
+    background-color: #222;
+  }
+  
+  .bg-light {
+    background-image: linear-gradient(to bottom right, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+  }
+  
+  .text-primary {
+    color: #007bff;
+  }
+  
+  /* Estilos adicionales */
+  .admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .admin-sidebar .nav-link {
+    color: #fff;
+  }
+  
+  .admin-sidebar .nav-link:hover {
+    text-decoration: none;
+  }
+  
+  .admin-content h2 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 30px;
+  }
+  
