@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página de Administrador</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'core/css/styles.css' %}">
+    <!-- Agrega aquí tus enlaces a las hojas de estilo adicionales si las tienes -->
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h3>Menú de Administrador</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Administrar Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Administrar Usuarios</a>
+                    </li>
+                    <!-- Agrega más opciones de administración según tus necesidades -->
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <h3>Panel de Administración</h3>
+                
+                <h4>Pedidos</h4>
+                <ul>
+                    {% for pedido in pedidos %}
+                        <li>{{ pedido.nombre }}</li>
+                    {% empty %}
+                        <li>No hay pedidos</li>
+                    {% endfor %}
+                </ul>
+                
+                <h4>Usuarios</h4>
+                <ul>
+                    {% for usuario in usuarios %}
+                        <li>{{ usuario.username }}</li>
+                    {% empty %}
+                        <li>No hay usuarios</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            var welcomeMessage = "{{ welcome_message|safe }}";
+            if (welcomeMessage) {
+                alert(welcomeMessage);
+            }
+        };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <!-- Agrega aquí tus enlaces a los scripts adicionales si los tienes -->
+</body>
+</html>
