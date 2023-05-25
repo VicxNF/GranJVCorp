@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 from .views import *
 from django.contrib.auth.decorators import login_required
+from rest_framework import routers
+from api.urls import path
 
 urlpatterns = [
-    path('', home, name='home'),
+    path('home/', home, name='home'),
     path('mostrar-pedidos/', mostrar_pedidos, name='mostrar_pedidos'),
     path('agregar-pedido/', agregar_pedido, name='agregar_pedido'),
     path('login/', iniciar_sesion, name='login'),

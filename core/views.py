@@ -8,7 +8,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
-
 def home(request):
     return render(request, 'core/home.html')
 
@@ -28,6 +27,8 @@ def agregar_pedido(request):
             
             formulario.save()
             datos['mensaje'] = "Registrado Correctamente"
+
+        return redirect(to="mostrar_pedidos")
 
     return render(request, 'core/agregar_pedido.html', datos)
 
@@ -81,6 +82,7 @@ def modificar_pedido(request,codigo):
         if formulario.is_valid:
             formulario.save()
             datos['mensaje'] = "Modificacion exitosa"
+        return redirect(to="mostrar_pedidos")
 
     return render(request, 'core/modificar_pedido.html', datos)
 
@@ -89,3 +91,5 @@ def eliminar_pedido(request, codigo):
     pedido.delete()
 
     return redirect(to="mostrar_pedidos")
+
+

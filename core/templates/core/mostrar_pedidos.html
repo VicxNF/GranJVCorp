@@ -49,7 +49,7 @@
                             <td>{{ pedido.direccion_envio }}</td>
                             <td>{{ pedido.total }}</td>
                             <td><a href="{% url 'modificar_pedido' pedido.codigo_seguimiento %}" class="btn btn-primary">Modificar</td>
-                            <td><a href="{% url 'modificar_pedido' pedido.codigo_seguimiento %}" class="btn btn-danger">Eliminar</td>    
+                            <td><a href="{% url 'eliminar_pedido' pedido.codigo_seguimiento %}" class="btn btn-danger">Eliminar</td>    
                         </tr>
                     {% endfor %}
                     </tbody>

@@ -130,4 +130,15 @@ button[type="submit"]:hover {
     background-color: #0056b3;
     border-color: #0056b3;
   }
+
+  .carousel-item img {
+    height: 100px; /* Ajusta el valor según tus necesidades */
+    object-fit: cover; /* Para mantener las proporciones originales de las imágenes */
+  }
+
+  .custom-card {
+    max-width: 100px;
+  }
+  
+
   
