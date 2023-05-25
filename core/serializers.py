@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Pedido
+from .models import Pedido
 
 
 class PedidoSerializer(serializers.ModelSerializer):

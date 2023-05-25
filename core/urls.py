@@ -4,9 +4,15 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import routers
 from api.urls import path
 from django.contrib.auth import views as auth_view
+from rest_framework.documentation import include_docs_urls
+
+router = routers.DefaultRouter()
+router.register(r'pedidos', PedidoView,'pedidos')
 
 urlpatterns = [
     path('home/', home, name='home'),
+    path('api/v1/', include(router.urls)),
+    path('docs/', include_docs_urls(title="Pedidos API")),
     path('mostrar-pedidos/', mostrar_pedidos, name='mostrar_pedidos'),
     path('agregar-pedido/', agregar_pedido, name='agregar_pedido'),
     path('login/', auth_view.LoginView.as_view(template_name='core/login.html'), name='login'),

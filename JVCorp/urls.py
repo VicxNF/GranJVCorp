@@ -19,10 +19,11 @@ from django.urls import path, include
 from core.views import *
 from api.urls import *
 from api.views import *
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('core.urls')),
-    path('api/', include('api.urls')),
+    path('pedidos/', include('core.urls')),
+    path('docs/', include_docs_urls(title="Pedidos API")),
     
 ]
