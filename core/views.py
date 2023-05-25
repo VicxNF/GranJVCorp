@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .models import Pedido
-from .forms import *
+from .forms import UserRegisterForm, PedidoForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -11,10 +11,12 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, 'core/home.html')
 
+@login_required()
 def mostrar_pedidos(request):
     pedidos = Pedido.objects.all()
     return render(request, 'core/mostrar_pedidos.html', {'pedidos': pedidos})
 
+@login_required()
 def agregar_pedido(request):
     datos = {
         'form' : PedidoForm()
@@ -35,35 +37,20 @@ def agregar_pedido(request):
 
     
 def register(request):
-    if request.method=='POST':
-        uname=request.POST.get('username')
-        email=request.POST.get('email')
-        pass1=request.POST.get('password1')
-        pass2=request.POST.get('password2')
-
-        if pass1!=pass2:
-            return HttpResponse("Las contraseñas no coinciden")
-        else:
-
-            my_user=User.objects.create_user(uname,email,pass1)
-            my_user.save()
-            return redirect('login')
-
-    return render(request, 'core/register.html')
-
-def iniciar_sesion(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        pass1 = request.POST.get('password')
-        user=authenticate(request,username=username,password=pass1)
-        if user is not None:
-            login(request,user)
-            return redirect('administrador')
-        else:
-            return HttpResponse ("Credenciales incorrectas")
-    return render(request, 'core/login.html')
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Bienvenido {username}, tu cuenta fue creada exitosamente')
+            return redirect('home')
+    else:
+        form = UserRegisterForm()
 
-@login_required
+
+    return render(request, 'core/register.html',{'form':form})
+
+@login_required()
 def administrador(request):
     pedidos= Pedido.objects.all()
     datos= {
@@ -71,6 +58,7 @@ def administrador(request):
     }
     return render(request, 'core/administrador.html', datos)
 
+@login_required()
 def modificar_pedido(request,codigo):
     pedido = Pedido.objects.get(codigo_seguimiento=codigo)
 
@@ -86,10 +74,13 @@ def modificar_pedido(request,codigo):
 
     return render(request, 'core/modificar_pedido.html', datos)
 
+@login_required()
 def eliminar_pedido(request, codigo):
     pedido = Pedido.objects.get(codigo_seguimiento=codigo)
     pedido.delete()
 
     return redirect(to="mostrar_pedidos")
 
-
+@login_required()
+def perfil(request):
+    return render(request, 'core/perfil.html')

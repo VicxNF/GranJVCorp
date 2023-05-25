@@ -1,35 +1,22 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
+
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Página de inicio</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'core/css/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'core/css/home.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Open+Sans:wght@800&display=swap" rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg" style="background-color: aqua;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-truck"></i>
-                GranJVCorp
-              </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}"><i class="bi bi-door-open-fill"></i>Iniciar Sesion</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <h1 class="text-center mb-4">Nosotros Somos GranJVCorp!</h1>
+                <h1 class="text-center mb-4" style="color: white;">Nosotros Somos GranJVCorp!</h1>
             </div>
         </div>
     </div>
@@ -70,7 +57,7 @@
       <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <h1 class="text-center mb-4">Nuestro equipo está conformado por:</h1>
+                <h1 class="text-center mb-4" style="color: white;">Nuestro equipo está conformado por:</h1>
             </div>
         </div>
     </div>
@@ -118,15 +105,9 @@
           </div>
         </div>
       </div>
-      
-
-    <footer class="bg-light py-4">
-        <div class="container text-center">
-            <p>Pie de página</p>
-        </div>
-    </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 </body>
 </html>
+{% endblock %}
