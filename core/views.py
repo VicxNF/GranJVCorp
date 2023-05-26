@@ -87,6 +87,10 @@ def eliminar_pedido(request, codigo):
 def perfil(request):
     return render(request, 'core/perfil.html')
 
+@login_required()
+def rastrear_pedido(request):
+    return render(request, 'core/rastrear_pedido.html')
+
 class PedidoView(viewsets.ModelViewSet):
     serializer_class = PedidoSerializer
     queryset = Pedido.objects.all()
