@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .serializers import PedidoSerializer
+import requests
 
 
 def home(request):
@@ -94,3 +95,26 @@ def rastrear_pedido(request):
 class PedidoView(viewsets.ModelViewSet):
     serializer_class = PedidoSerializer
     queryset = Pedido.objects.all()
+
+def obtener_saludo():
+    url = 'https://musicpro.bemtorres.win/api/v1/test/saludo'
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        
+        mensaje = data.get('mensaje')
+        
+        if mensaje:
+            return mensaje
+        else:
+            return 'Mensaje no disponible'
+    
+    except requests.exceptions.RequestException as e:
+        print('Error al realizar la solicitud:', e)
+        return 'Error al obtener el mensaje'
+
+def saludo(request):
+    mensaje = obtener_saludo()
+    return render(request, 'core/saludo.html', {'mensaje': mensaje})

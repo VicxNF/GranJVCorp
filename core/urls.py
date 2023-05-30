@@ -2,7 +2,6 @@ from django.urls import path, include
 from .views import *
 from django.contrib.auth.decorators import login_required
 from rest_framework import routers
-from api.urls import path
 from django.contrib.auth import views as auth_view
 from rest_framework.documentation import include_docs_urls
 
@@ -23,4 +22,5 @@ urlpatterns = [
     path('eliminar-pedido/<codigo>', eliminar_pedido, name="eliminar_pedido"),
     path('perfil/', perfil, name='perfil'),
     path('rastrear_pedido/', rastrear_pedido, name='rastrear_pedido'),
+    path('saludo/', saludo, name='saludo'),
 ]
