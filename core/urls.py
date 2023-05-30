@@ -22,5 +22,5 @@ urlpatterns = [
     path('eliminar-pedido/<codigo>', eliminar_pedido, name="eliminar_pedido"),
     path('perfil/', perfil, name='perfil'),
     path('rastrear_pedido/', rastrear_pedido, name='rastrear_pedido'),
-    path('saludo/', saludo, name='saludo'),
+    path('saludo/', obtener_colaborador, name='saludo'),
 ]

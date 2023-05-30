@@ -25,10 +25,9 @@ from django.contrib.auth import views as auth_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pedidos/', include('core.urls')),
-    path('docs/', include_docs_urls(title="Pedidos API")),
     path('home/', home, name='home'),
-    path('api/v1/', include(router.urls)),
-    path('docs/', include_docs_urls(title="Pedidos API")),
+    path('api/v1/', include(router.urls), name='api'),
+    path('docs/', include_docs_urls(title="Pedidos API"), name='docs'),
     path('mostrar-pedidos/', mostrar_pedidos, name='mostrar_pedidos'),
     path('agregar-pedido/', agregar_pedido, name='agregar_pedido'),
     path('login/', auth_view.LoginView.as_view(template_name='core/login.html'), name='login'),
@@ -39,6 +38,6 @@ urlpatterns = [
     path('eliminar-pedido/<codigo>', eliminar_pedido, name="eliminar_pedido"),
     path('perfil/', perfil, name='perfil'),
     path('rastrear_pedido/', rastrear_pedido, name='rastrear_pedido'),
-    path('saludo/', saludo, name='saludo'),
+    path('saludo/', obtener_colaborador, name='saludo'),
 ]
     
