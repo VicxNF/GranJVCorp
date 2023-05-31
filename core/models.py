@@ -1,6 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class Producto(models.Model):
+    id = models.IntegerField(primary_key=True)
+    codigo = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    asset = models.URLField()
+    estado = models.IntegerField()
+
+    def __str__(self):
+        return self.nombre
+
 class Pedido(models.Model):
     ESTADO_CHOICES = (
         ('Pendiente', 'Pendiente'),
@@ -21,10 +33,13 @@ class Pedido(models.Model):
     direccion_envio = models.CharField(blank=True, max_length=70, verbose_name='Direccion del pedido')
     metodo_pago = models.CharField(max_length=100, choices=METODO_CHOICES, blank=True, verbose_name='Metodo de Pago')
     total = models.IntegerField(verbose_name='Total')
-    producto = models.JSONField(blank=True, null=True)
+    producto = models.ManyToManyField(Producto, blank=True)
     
 
     # Otros campos adicionales según tus necesidades, como productos
 
     def __str__(self):
-        return f"Pedido {self.codigo_seguimiento} - Usuario: {self.usuario.username}"
+        productos = self.producto.all()
+        productos_nombres = [str(producto) for producto in productos]
+        nombres_productos = ", ".join(productos_nombres)
+        return f"Pedido {self.codigo_seguimiento} - Usuario: {self.usuario.username} Productos: {nombres_productos}"

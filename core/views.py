@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .models import Pedido
+from .models import *
 from .forms import UserRegisterForm, PedidoForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -7,9 +7,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
-from .serializers import PedidoSerializer
+from .serializers import *
 import requests
 from django.http import JsonResponse
+from rest_framework.response import Response
+
 
 
 
@@ -24,9 +26,8 @@ def mostrar_pedidos(request):
     context = {
         'pedidos': pedidos,
     }
-    
-    return render(request, 'core/mostrar_pedidos.html', context)
 
+    return render(request, 'core/mostrar_pedidos.html', context)
 @login_required
 def agregar_pedido(request):
     # Obtener todos los productos de la API
@@ -46,22 +47,33 @@ def agregar_pedido(request):
             pedido = formulario.save(commit=False)
 
             # Obtener el ID del producto seleccionado en el formulario
-            producto_id = formulario.cleaned_data['producto_id']
+            producto_id = int(request.POST.get('producto_id'))
 
             # Buscar el producto correspondiente al ID en la lista de productos de la API
             producto_seleccionado = next((producto for producto in productos_api if producto['id'] == producto_id), None)
 
             if producto_seleccionado:
-                # Asignar el producto al campo 'producto' del pedido
-                pedido.producto = producto_seleccionado
+                # Obtener o crear el objeto Producto correspondiente al producto seleccionado
+                producto, _ = Producto.objects.get_or_create(
+                    id=producto_seleccionado['id'],
+                    defaults={
+                        'codigo': producto_seleccionado['codigo'],
+                        'nombre': producto_seleccionado['nombre'],
+                        'descripcion': producto_seleccionado['descripcion'],
+                        'precio': producto_seleccionado['precio'],
+                        'asset': producto_seleccionado['asset'],
+                        'estado': producto_seleccionado['estado']
+                    }
+                )
 
-            pedido.save()
-            datos['mensaje'] = "Registrado correctamente"
+                pedido.save()
+                pedido.producto.set([producto])
 
-            return redirect(to="mostrar_pedidos")
+                datos['mensaje'] = "Registrado correctamente"
+
+                return redirect(to="mostrar_pedidos")
 
     return render(request, 'core/agregar_pedido.html', datos)
-
 
     
 def register(request):
@@ -120,6 +132,24 @@ def rastrear_pedido(request):
 class PedidoView(viewsets.ModelViewSet):
     serializer_class = PedidoSerializer
     queryset = Pedido.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Obtenemos los IDs de los productos enviados en la solicitud
+        productos_ids = request.data.get('producto', [])
+
+        # Creamos el pedido
+        self.perform_create(serializer)
+
+        # Agregamos los productos al pedido
+        pedido = serializer.instance
+        pedido.producto.set(productos_ids)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
 def obtener_colaborador(request):
     id = request.GET.get('id')
