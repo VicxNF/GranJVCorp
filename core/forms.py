@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 
 class PedidoForm(ModelForm):
+    producto_id = forms.IntegerField(label='ID del producto')
     class Meta:
         model = Pedido
-        fields = ['usuario', 'estado', 'direccion_envio', 'metodo_pago', 'total', 'codigo_seguimiento']
-
+        fields = ['usuario', 'estado', 'direccion_envio', 'metodo_pago', 'total', 'codigo_seguimiento','producto_id']
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()

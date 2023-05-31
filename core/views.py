@@ -20,23 +20,45 @@ def home(request):
 @login_required()
 def mostrar_pedidos(request):
     pedidos = Pedido.objects.all()
-    return render(request, 'core/mostrar_pedidos.html', {'pedidos': pedidos})
+    
+    context = {
+        'pedidos': pedidos,
+    }
+    
+    return render(request, 'core/mostrar_pedidos.html', context)
 
-@login_required()
+@login_required
 def agregar_pedido(request):
+    # Obtener todos los productos de la API
+    response = requests.get('https://musicpro.bemtorres.win/api/v1/bodega/producto/')
+    data = response.json()
+    productos_api = data.get('productos', [])
+
     datos = {
-        'form' : PedidoForm()
+        'form': PedidoForm(),
+        'productos_api': productos_api
     }
 
-    if request.method== 'POST' :
+    if request.method == 'POST':
         formulario = PedidoForm(request.POST)
 
-        if formulario.is_valid:
-            
-            formulario.save()
-            datos['mensaje'] = "Registrado Correctamente"
+        if formulario.is_valid():
+            pedido = formulario.save(commit=False)
 
-        return redirect(to="mostrar_pedidos")
+            # Obtener el ID del producto seleccionado en el formulario
+            producto_id = formulario.cleaned_data['producto_id']
+
+            # Buscar el producto correspondiente al ID en la lista de productos de la API
+            producto_seleccionado = next((producto for producto in productos_api if producto['id'] == producto_id), None)
+
+            if producto_seleccionado:
+                # Asignar el producto al campo 'producto' del pedido
+                pedido.producto = producto_seleccionado
+
+            pedido.save()
+            datos['mensaje'] = "Registrado correctamente"
+
+            return redirect(to="mostrar_pedidos")
 
     return render(request, 'core/agregar_pedido.html', datos)
 

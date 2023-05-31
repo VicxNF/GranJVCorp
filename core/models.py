@@ -21,9 +21,10 @@ class Pedido(models.Model):
     direccion_envio = models.CharField(blank=True, max_length=70, verbose_name='Direccion del pedido')
     metodo_pago = models.CharField(max_length=100, choices=METODO_CHOICES, blank=True, verbose_name='Metodo de Pago')
     total = models.IntegerField(verbose_name='Total')
+    producto = models.JSONField(blank=True, null=True)
     
 
     # Otros campos adicionales según tus necesidades, como productos
 
     def __str__(self):
-        return f"Pedido {self.id} - Usuario: {self.usuario.username}"
+        return f"Pedido {self.codigo_seguimiento} - Usuario: {self.usuario.username}"
