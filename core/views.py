@@ -28,53 +28,67 @@ def mostrar_pedidos(request):
     }
 
     return render(request, 'core/mostrar_pedidos.html', context)
+
+
 @login_required
 def agregar_pedido(request):
-    # Obtener todos los productos de la API
     response = requests.get('https://musicpro.bemtorres.win/api/v1/bodega/producto/')
     data = response.json()
     productos_api = data.get('productos', [])
 
+    if request.method == 'POST':
+        formulario = PedidoForm(request.POST)
+        if formulario.is_valid():
+            pedido = formulario.save(commit=False)
+            pedido.usuario = request.user
+
+            # Guardar el pedido sin los productos primero
+            pedido.save()
+
+            producto_ids = request.POST.getlist('producto_id')
+            productos_seleccionados = []
+
+            for producto_id in producto_ids:
+                # Buscar el producto correspondiente al ID en la lista de productos de la API
+                producto_seleccionado = next(
+                    (producto for producto in productos_api if producto['id'] == int(producto_id)), None)
+
+                if producto_seleccionado:
+                    # Obtener o crear el objeto Producto correspondiente al producto seleccionado
+                    producto, _ = Producto.objects.get_or_create(
+                        id=producto_seleccionado['id'],
+                        defaults={
+                            'codigo': producto_seleccionado['codigo'],
+                            'nombre': producto_seleccionado['nombre'],
+                            'descripcion': producto_seleccionado['descripcion'],
+                            'precio': producto_seleccionado['precio'],
+                            'asset': producto_seleccionado['asset'],
+                            'estado': producto_seleccionado['estado']
+                        }
+                    )
+
+                    productos_seleccionados.append(producto)
+
+            pedido.producto.set(productos_seleccionados)
+            pedido.save()
+
+            datos = {
+                'form': PedidoForm(),
+                'productos_api': productos_api,
+                'mensaje': "Registrado correctamente"
+            }
+
+            return redirect('mostrar_pedidos')
+
+    else:
+        formulario = PedidoForm()
+
     datos = {
-        'form': PedidoForm(),
+        'form': formulario,
         'productos_api': productos_api
     }
 
-    if request.method == 'POST':
-        formulario = PedidoForm(request.POST)
-
-        if formulario.is_valid():
-            pedido = formulario.save(commit=False)
-
-            # Obtener el ID del producto seleccionado en el formulario
-            producto_id = int(request.POST.get('producto_id'))
-
-            # Buscar el producto correspondiente al ID en la lista de productos de la API
-            producto_seleccionado = next((producto for producto in productos_api if producto['id'] == producto_id), None)
-
-            if producto_seleccionado:
-                # Obtener o crear el objeto Producto correspondiente al producto seleccionado
-                producto, _ = Producto.objects.get_or_create(
-                    id=producto_seleccionado['id'],
-                    defaults={
-                        'codigo': producto_seleccionado['codigo'],
-                        'nombre': producto_seleccionado['nombre'],
-                        'descripcion': producto_seleccionado['descripcion'],
-                        'precio': producto_seleccionado['precio'],
-                        'asset': producto_seleccionado['asset'],
-                        'estado': producto_seleccionado['estado']
-                    }
-                )
-
-                pedido.save()
-                pedido.producto.set([producto])
-
-                datos['mensaje'] = "Registrado correctamente"
-
-                return redirect(to="mostrar_pedidos")
-
     return render(request, 'core/agregar_pedido.html', datos)
-
     
 def register(request):
     if request.method == 'POST':

@@ -33,6 +33,14 @@
                     {% csrf_token %}
                     <div class="form-group">
                         {{ form.as_table }}
+                        <ul>
+                            {% for producto in productos_api %}
+                                <li>
+                                    <input type="checkbox" name="producto_id" value="{{ producto.id }}">
+                                    {{ producto.nombre }}
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
 
                     <input type="submit" class="btn btn-danger" id="enviar" value="Enviar">
