@@ -22,7 +22,12 @@ def home(request):
 @login_required()
 def mostrar_pedidos(request):
     pedidos = Pedido.objects.all()
-    
+    for pedido in pedidos:
+        total = 0
+        for producto in pedido.producto.all():
+            total += producto.precio
+        pedido.total = total
+
     context = {
         'pedidos': pedidos,
     }

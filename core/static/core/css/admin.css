@@ -140,3 +140,13 @@
     --bs-offcanvas-zindex: 1045;
     --bs-offcanvas-width: 499px;
   }
+
+  .checkbox-columnas {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .checkbox-columnas label {
+    width: 33.33%; /* Ajusta este valor según la cantidad de columnas que deseas */
+    box-sizing: border-box;
+  }

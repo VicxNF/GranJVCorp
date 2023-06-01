@@ -32,9 +32,10 @@ class Pedido(models.Model):
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='Pendiente', verbose_name='Estado del Pedido')
     direccion_envio = models.CharField(blank=True, max_length=70, verbose_name='Direccion del pedido')
     metodo_pago = models.CharField(max_length=100, choices=METODO_CHOICES, blank=True, verbose_name='Metodo de Pago')
-    total = models.IntegerField(verbose_name='Total')
     producto = models.ManyToManyField(Producto, blank=True)
     
+    def calcular_total(self):
+        return sum(producto.precio for producto in self.producto.all())
 
     # Otros campos adicionales según tus necesidades, como productos
 

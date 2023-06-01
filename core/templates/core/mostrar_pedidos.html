@@ -36,7 +36,8 @@
                         <th scope="col">Fecha de Pedido</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Dirección de Envio</th>
-                        <th scope="col">Monto Total</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Total</th>
                         <th scope="col">Productos</th>
                         <th scope="col">Opciones</th>
                     </tr>
@@ -49,7 +50,12 @@
                                 <td style="color: white;">{{ pedido.fecha_creacion }}</td>
                                 <td style="color: white;">{{ pedido.estado }}</td>
                                 <td style="color: white;">{{ pedido.direccion_envio }}</td>
-                                <td style="color: white;">{{ pedido.total }}</td>
+                                <td style="color: white;">
+                                    {% for producto in pedido.producto.all %}
+                                        {{ producto.precio|floatformat:"-3" }}$,  <!-- Mostrar precio del producto -->
+                                    {% endfor %}
+                                </td>
+                                <td style="color: white;">{{ pedido.total|floatformat:"-3" }}$</td>
                                 <td style="color: white;">
                                     {% for producto in pedido.producto.all %}
                                         {{ producto.nombre }},

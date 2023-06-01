@@ -8,7 +8,7 @@ from django.forms.widgets import CheckboxSelectMultiple
 class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = ['usuario', 'estado', 'direccion_envio', 'metodo_pago', 'total', 'codigo_seguimiento']
+        fields = ['usuario', 'estado', 'direccion_envio', 'metodo_pago', 'codigo_seguimiento']
         widgets = {
             'producto': forms.CheckboxSelectMultiple()
         }
