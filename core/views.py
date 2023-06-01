@@ -125,9 +125,6 @@ def eliminar_pedido(request, codigo):
 def perfil(request):
     return render(request, 'core/perfil.html')
 
-@login_required()
-def rastrear_pedido(request):
-    return render(request, 'core/rastrear_pedido.html')
 
 class PedidoView(viewsets.ModelViewSet):
     serializer_class = PedidoSerializer
@@ -170,4 +167,15 @@ def obtener_colaborador(request):
 
     return render(request, 'core/saludo.html', context)
 
+@login_required
+def rastrear_pedido(request):
+    pedido = None
 
+    if request.method == 'POST':
+        codigo_seguimiento = request.POST.get('codigo_seguimiento')
+        try:
+            pedido = Pedido.objects.get(codigo_seguimiento=codigo_seguimiento)
+        except Pedido.DoesNotExist:
+            pedido = None
+
+    return render(request, 'core/rastrear_pedido.html', {'pedido': pedido})

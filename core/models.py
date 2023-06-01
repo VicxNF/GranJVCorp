@@ -15,8 +15,8 @@ class Producto(models.Model):
 
 class Pedido(models.Model):
     ESTADO_CHOICES = (
-        ('Pendiente', 'Pendiente'),
-        ('En progreso', 'En progreso'),
+        ('En preparacion', 'En preparacion'),
+        ('En camino', 'En camino'),
         ('Completado', 'Completado'),
     )
     METODO_CHOICES = (

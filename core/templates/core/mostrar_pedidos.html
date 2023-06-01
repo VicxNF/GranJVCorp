@@ -25,13 +25,12 @@
                 </li>
             </ul>
         </div>
-        <div class="admin-content bg-light">
-            <h2 class="text-center text-primary mt-5">Contenido del administrador</h2>
+        <div class="admin-content">
             <div id="pedidos" class="contenido-pedidos">
-                <h3>Pedidos</h3>
+                <h3 style="color: white;">Pedidos</h3>
                 <table class="table table-striped">
-                    <thead>
-                    <tr>
+                    <thead style="color: white;">
+                    <tr style="color: white;">
                         <th scope="col">Código de Seguimiento</th>
                         <th scope="col">Usuario</th>
                         <th scope="col">Fecha de Pedido</th>
@@ -42,16 +41,16 @@
                         <th scope="col">Opciones</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="color: white;">
                         {% for pedido in pedidos %}
-                            <tr>
-                                <td>{{ pedido.codigo_seguimiento }}</td>
-                                <td>{{ pedido.usuario }}</td>
-                                <td>{{ pedido.fecha_creacion }}</td>
-                                <td>{{ pedido.estado }}</td>
-                                <td>{{ pedido.direccion_envio }}</td>
-                                <td>{{ pedido.total }}</td>
-                                <td>
+                            <tr style="color: white;">
+                                <td style="color: white;">{{ pedido.codigo_seguimiento }}</td>
+                                <td style="color: white;">{{ pedido.usuario }}</td>
+                                <td style="color: white;">{{ pedido.fecha_creacion }}</td>
+                                <td style="color: white;">{{ pedido.estado }}</td>
+                                <td style="color: white;">{{ pedido.direccion_envio }}</td>
+                                <td style="color: white;">{{ pedido.total }}</td>
+                                <td style="color: white;">
                                     {% for producto in pedido.producto.all %}
                                         {{ producto.nombre }},
                                     {% endfor %}
@@ -67,6 +66,7 @@
             </div>
         </div>
     </div>
+    
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
