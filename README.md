@@ -36,3 +36,19 @@ y con esto, la pagina ya estará funcionando correctamente, y para ir a la pagin
 localhost:8000/home
 ```
 Y con esto, ya estaras navegando en la pagina de GranJVCorp!
+
+# Extra
+
+Para acceder a la api Django Rest Framework de esta pagina, necesitas colocar el siguiente link: 
+
+```
+localhost:8000/api/v1/pedidos
+```
+
+Y para acceder al documento de la api, se necesita el siguiente link: 
+
+```
+localhost:8000/docs
+```
+
+
