@@ -34,8 +34,16 @@
             <input type="text" name="codigo_seguimiento" id="codigo_seguimiento" required>
             <button type="submit">Buscar</button>
             {% if estado_pedido %}
-            <h3>Estado del pedido:</h3>
-            <p>{{ estado_pedido.estado }}</p>
+                <h3 style="color: white;">Estado del pedido:</h3>
+                <p style="color: white;">{{ estado_pedido }}</p>
+                {% if direccion_origen %}
+                    <h4 style="color: white;">Dirección de origen:</h4>
+                    <p style="color: white;">{{ direccion_origen }}</p>
+                {% endif %}
+                {% if direccion_destino %}
+                    <h4 style="color: white;">Dirección de destino:</h4>
+                    <p style="color: white;">{{ direccion_destino }}</p>
+                {% endif %}
             {% endif %}
         </form>
 

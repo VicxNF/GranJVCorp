@@ -262,8 +262,19 @@ def seguimiento_pedido(request):
         response = requests.get(url_seguimiento)
 
         if response.status_code == 200:
-            estado_pedido = response.json().get('result')
-            return render(request, 'core/seguimiento_pedido.html', {'estado_pedido': estado_pedido})
+            result = response.json().get('result')
+            estado_pedido = result.get('estado')
+            solicitud = result.get('solicitud')
+            direccion_origen = solicitud.get('direccion_origen')
+            direccion_destino = solicitud.get('direccion_destino')
+
+            context = {
+                'estado_pedido': estado_pedido,
+                'direccion_origen': direccion_origen,
+                'direccion_destino': direccion_destino
+            }
+
+            return render(request, 'core/seguimiento_pedido.html', context)
         else:
             return HttpResponse("Error al obtener el estado del pedido")
 
