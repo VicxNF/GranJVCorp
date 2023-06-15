@@ -19,3 +19,12 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = {'username', 'email', 'password1', 'password2'}
+
+class PediditoForm(forms.Form):
+    # Define los campos necesarios para generar un pedido
+    nombre_origen = forms.CharField(label='Nombre Origen')
+    direccion_origen = forms.CharField(label='Dirección Origen')
+    nombre_destino = forms.CharField(label='Nombre Destino')
+    direccion_destino = forms.CharField(label='Dirección Destino')
+    comentario = forms.CharField(label='Comentario', widget=forms.Textarea)
+    info = forms.CharField(label='Información adicional', required=False)

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .models import *
-from .forms import UserRegisterForm, PedidoForm
+from .forms import UserRegisterForm, PedidoForm, PediditoForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -11,6 +11,7 @@ from .serializers import *
 import requests
 from django.http import JsonResponse
 from rest_framework.response import Response
+
 
 
 
@@ -198,3 +199,61 @@ def rastrear_pedido(request):
             pedido = None
 
     return render(request, 'core/rastrear_pedido.html', {'pedido': pedido})
+
+def generar_pedido(request):
+    if request.method == 'POST':
+        form = PediditoForm(request.POST)
+        if form.is_valid():
+            # Obtener los datos del formulario
+            nombre_origen = form.cleaned_data['nombre_origen']
+            direccion_origen = form.cleaned_data['direccion_origen']
+            nombre_destino = form.cleaned_data['nombre_destino']
+            direccion_destino = form.cleaned_data['direccion_destino']
+            comentario = form.cleaned_data['comentario']
+            info = form.cleaned_data['info']
+
+            # Crear el objeto JSON con los datos del formulario
+            data = {
+                'nombre_origen': nombre_origen,
+                'direccion_origen': direccion_origen,
+                'nombre_destino': nombre_destino,
+                'direccion_destino': direccion_destino,
+                'comentario': comentario,
+                'info': info
+            }
+
+            # Realizar la solicitud POST a la API de solicitud con los datos del formulario
+            url_solicitud = 'https://musicpro.bemtorres.win/api/v1/transporte/solicitud'
+            response = requests.post(url_solicitud, json=data)
+
+            # Verificar si la solicitud fue exitosa (código de respuesta 200)
+            if response.status_code == 201:
+                # Se generó el pedido y se obtuvo el código de seguimiento
+                codigo_seguimiento = response.json()['codigo_seguimiento']
+                # Aquí puedes realizar las acciones necesarias con el código de seguimiento
+
+                # Devolver una respuesta adecuada en tu vista
+                return HttpResponse(f"Código de seguimiento generado: {codigo_seguimiento}")
+            else:
+                # Hubo un error en la solicitud
+                return HttpResponse("Error al generar el pedido")
+    else:
+        form = PediditoForm()
+
+    # Renderizar la plantilla con el formulario
+    return render(request, 'core/generar_pedido.html', {'form': form})
+
+def seguimiento_pedido(request):
+    if request.method == 'POST':
+        codigo_seguimiento = request.POST.get('codigo_seguimiento')
+        # Realiza la solicitud GET a la API con el código de seguimiento
+        url_seguimiento = f'https://musicpro.bemtorres.win/api/v1/transporte/seguimiento/{codigo_seguimiento}'
+        response = requests.get(url_seguimiento)
+
+        if response.status_code == 200:
+            estado_pedido = response.json().get('result')
+            return render(request, 'core/seguimiento_pedido.html', {'estado_pedido': estado_pedido})
+        else:
+            return HttpResponse("Error al obtener el estado del pedido")
+
+    return render(request, 'core/seguimiento_pedido.html')

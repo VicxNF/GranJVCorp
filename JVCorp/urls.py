@@ -39,5 +39,7 @@ urlpatterns = [
     path('perfil/', perfil, name='perfil'),
     path('rastrear_pedido/', rastrear_pedido, name='rastrear_pedido'),
     path('saludo/', obtener_colaborador, name='saludo'),
+    path('generar_pedido/', generar_pedido, name='generar_pedido'),
+    path('seguimiento_pedido/', seguimiento_pedido, name='seguimiento_pedido'),
 ]
     
