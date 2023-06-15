@@ -226,14 +226,25 @@ def generar_pedido(request):
             url_solicitud = 'https://musicpro.bemtorres.win/api/v1/transporte/solicitud'
             response = requests.post(url_solicitud, json=data)
 
-            # Verificar si la solicitud fue exitosa (código de respuesta 200)
+            # Verificar si la solicitud fue exitosa (código de respuesta 201)
             if response.status_code == 201:
                 # Se generó el pedido y se obtuvo el código de seguimiento
                 codigo_seguimiento = response.json()['codigo_seguimiento']
-                # Aquí puedes realizar las acciones necesarias con el código de seguimiento
 
-                # Devolver una respuesta adecuada en tu vista
-                return HttpResponse(f"Código de seguimiento generado: {codigo_seguimiento}")
+                # Crear una instancia del modelo Pedido y guardarla en la base de datos
+                pedido = Pedidos(
+                    codigo_seguimiento=codigo_seguimiento,
+                    nombre_origen=nombre_origen,
+                    direccion_origen=direccion_origen,
+                    nombre_destino=nombre_destino,
+                    direccion_destino=direccion_destino,
+                    comentario=comentario,
+                    info=info
+                )
+                pedido.save()
+
+                # Redirigir al usuario a la lista de pedidos
+                return redirect('lista_pedidos')
             else:
                 # Hubo un error en la solicitud
                 return HttpResponse("Error al generar el pedido")
@@ -257,3 +268,7 @@ def seguimiento_pedido(request):
             return HttpResponse("Error al obtener el estado del pedido")
 
     return render(request, 'core/seguimiento_pedido.html')
+
+def lista_pedidos(request):
+    pedidos = Pedidos.objects.all()
+    return render(request, 'core/lista_pedidos.html', {'pedidos': pedidos})

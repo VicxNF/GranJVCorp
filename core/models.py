@@ -44,3 +44,16 @@ class Pedido(models.Model):
         productos_nombres = [str(producto) for producto in productos]
         nombres_productos = ", ".join(productos_nombres)
         return f"Pedido {self.codigo_seguimiento} - Usuario: {self.usuario.username} Productos: {nombres_productos}"
+
+
+class Pedidos(models.Model):
+    codigo_seguimiento = models.CharField(max_length=50)
+    nombre_origen = models.CharField(max_length=100)
+    direccion_origen = models.CharField(max_length=200)
+    nombre_destino = models.CharField(max_length=100)
+    direccion_destino = models.CharField(max_length=200)
+    comentario = models.CharField(max_length=200)
+    info = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.codigo_seguimiento

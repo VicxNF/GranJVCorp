@@ -24,4 +24,5 @@ urlpatterns = [
     path('saludo/', obtener_colaborador, name='saludo'),
     path('generar_pedido/', generar_pedido, name='generar_pedido'),
     path('seguimiento_pedido/', seguimiento_pedido, name='seguimiento_pedido'),
+    path('lista_pedidos/', lista_pedidos, name='lista_pedidos'),
 ]
