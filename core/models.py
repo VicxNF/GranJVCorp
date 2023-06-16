@@ -47,13 +47,19 @@ class Pedido(models.Model):
 
 
 class Pedidos(models.Model):
-    codigo_seguimiento = models.CharField(max_length=50)
+    ESTADO_CHOICES = (
+        ('En preparacion', 'En preparacion'),
+        ('En camino', 'En camino'),
+        ('Completado', 'Completado'),
+    )
+    codigo_seguimiento = models.CharField(primary_key=True, unique=True, max_length=50)
     nombre_origen = models.CharField(max_length=100)
     direccion_origen = models.CharField(max_length=200)
     nombre_destino = models.CharField(max_length=100)
     direccion_destino = models.CharField(max_length=200)
     comentario = models.CharField(max_length=200)
     info = models.CharField(max_length=200)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='En preparacion', verbose_name='Estado del Pedido')
 
     def __str__(self):
         return self.codigo_seguimiento

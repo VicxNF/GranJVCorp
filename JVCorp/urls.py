@@ -26,7 +26,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('pedidos/', include('core.urls')),
     path('home/', home, name='home'),
-    path('api/v1/pedidos/', PedidosView.as_view({'post': 'create'}), name='api-agregar-pedido'),
     path('docs/', include_docs_urls(title="Pedidos API")),
     path('mostrar-pedidos/', mostrar_pedidos, name='mostrar_pedidos'),
     path('agregar-pedido/', agregar_pedido, name='agregar_pedido'),
