@@ -16,3 +16,7 @@ class PedidoSerializer(serializers.ModelSerializer):
         return productos_nombres
 
 
+class PedidosSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Pedidos
+        fields = '__all__'

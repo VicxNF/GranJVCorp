@@ -11,7 +11,7 @@ from .serializers import *
 import requests
 from django.http import JsonResponse
 from rest_framework.response import Response
-
+from rest_framework import status
 
 
 
@@ -283,3 +283,17 @@ def seguimiento_pedido(request):
 def lista_pedidos(request):
     pedidos = Pedidos.objects.all()
     return render(request, 'core/lista_pedidos.html', {'pedidos': pedidos})
+
+class PedidosView(viewsets.ModelViewSet):
+    serializer_class = PedidosSerializer
+    queryset = Pedidos.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Creamos el pedido
+        self.perform_create(serializer)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

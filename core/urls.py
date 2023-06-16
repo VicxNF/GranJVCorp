@@ -9,7 +9,7 @@ from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('home/', home, name='home'),
-    path('api/v1/pedidos/', PedidoView.as_view({'post': 'create'}), name='api-agregar-pedido'),
+    path('api/v1/pedidos/', PedidosView.as_view({'post': 'create'}), name='api-agregar-pedido'),
     path('docs/', include_docs_urls(title="Pedidos API")),
     path('mostrar-pedidos/', mostrar_pedidos, name='mostrar_pedidos'),
     path('agregar-pedido/', agregar_pedido, name='agregar_pedido'),
