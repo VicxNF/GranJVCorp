@@ -26,5 +26,3 @@ class PediditoForm(forms.Form):
     direccion_origen = forms.CharField(label='Dirección Origen')
     nombre_destino = forms.CharField(label='Nombre Destino')
     direccion_destino = forms.CharField(label='Dirección Destino')
-    comentario = forms.CharField(label='Comentario', widget=forms.Textarea)
-    info = forms.CharField(label='Información adicional', required=False)
