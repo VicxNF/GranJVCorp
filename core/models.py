@@ -57,8 +57,6 @@ class Pedidos(models.Model):
     direccion_origen = models.CharField(max_length=200)
     nombre_destino = models.CharField(max_length=100)
     direccion_destino = models.CharField(max_length=200)
-    comentario = models.CharField(max_length=200)
-    info = models.CharField(max_length=200)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='En preparacion', verbose_name='Estado del Pedido')
 
     def __str__(self):
