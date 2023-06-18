@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from .models import *
-from .forms import UserRegisterForm, PedidoForm, PediditoForm
+from .forms import UserRegisterForm, PedidoForm, PedidosForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -12,6 +12,11 @@ import requests
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework import status
+import smtplib
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from django.conf import settings
+from django.core.mail import EmailMessage
 
 
 
@@ -118,28 +123,6 @@ def administrador(request):
     }
     return render(request, 'core/administrador.html', datos)
 
-@login_required()
-def modificar_pedido(request,codigo):
-    pedido = Pedido.objects.get(codigo_seguimiento=codigo)
-
-    datos = {
-        'form': PedidoForm(instance=pedido)
-    }
-    if request.method== 'POST':
-        formulario = PedidoForm(data=request.POST,instance=pedido)
-        if formulario.is_valid:
-            formulario.save()
-            datos['mensaje'] = "Modificacion exitosa"
-        return redirect(to="mostrar_pedidos")
-
-    return render(request, 'core/modificar_pedido.html', datos)
-
-@login_required()
-def eliminar_pedido(request, codigo):
-    pedido = Pedido.objects.get(codigo_seguimiento=codigo)
-    pedido.delete()
-
-    return redirect(to="mostrar_pedidos")
 
 @login_required()
 def perfil(request):
@@ -202,56 +185,14 @@ def rastrear_pedido(request):
 
 def generar_pedido(request):
     if request.method == 'POST':
-        form = PediditoForm(request.POST)
+        form = PedidosForm(request.POST)
         if form.is_valid():
-            # Obtener los datos del formulario
-            nombre_origen = form.cleaned_data['nombre_origen']
-            direccion_origen = form.cleaned_data['direccion_origen']
-            nombre_destino = form.cleaned_data['nombre_destino']
-            direccion_destino = form.cleaned_data['direccion_destino']
-            comentario = form.cleaned_data['comentario']
-            info = form.cleaned_data['info']
-
-            # Crear el objeto JSON con los datos del formulario
-            data = {
-                'nombre_origen': nombre_origen,
-                'direccion_origen': direccion_origen,
-                'nombre_destino': nombre_destino,
-                'direccion_destino': direccion_destino,
-                'comentario': comentario,
-                'info': info
-            }
-
-            # Realizar la solicitud POST a la API de solicitud con los datos del formulario
-            url_solicitud = 'https://musicpro.bemtorres.win/api/v1/transporte/solicitud'
-            response = requests.post(url_solicitud, json=data)
-
-            # Verificar si la solicitud fue exitosa (código de respuesta 201)
-            if response.status_code == 201:
-                # Se generó el pedido y se obtuvo el código de seguimiento
-                codigo_seguimiento = response.json()['codigo_seguimiento']
-
-                # Crear una instancia del modelo Pedido y guardarla en la base de datos
-                pedido = Pedidos(
-                    codigo_seguimiento=codigo_seguimiento,
-                    nombre_origen=nombre_origen,
-                    direccion_origen=direccion_origen,
-                    nombre_destino=nombre_destino,
-                    direccion_destino=direccion_destino,
-                    comentario=comentario,
-                    info=info
-                )
-                pedido.save()
-
-                # Redirigir al usuario a la lista de pedidos
-                return redirect('lista_pedidos')
-            else:
-                # Hubo un error en la solicitud
-                return HttpResponse("Error al generar el pedido")
+            pedido = form.save()
+            # Realizar cualquier otra acción que necesites con el pedido creado
+            return redirect(to= "lista_pedidos")  # Redirigir a la página de éxito o a otra vista
     else:
-        form = PediditoForm()
+        form = PedidosForm()
 
-    # Renderizar la plantilla con el formulario
     return render(request, 'core/generar_pedido.html', {'form': form})
 
 def seguimiento_pedido(request):
@@ -297,3 +238,26 @@ class PedidosView(viewsets.ModelViewSet):
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+
+def modificar_pedido(request, codigo_seguimiento):
+    pedido = get_object_or_404(Pedidos, codigo_seguimiento=codigo_seguimiento)
+
+    if request.method == 'POST':
+        form = PedidosForm(request.POST, instance=pedido)
+        if form.is_valid():
+            form.save()
+            # Realiza cualquier acción adicional después de modificar el pedido
+            return redirect('lista_pedidos')  # Redirige a la página de la lista de pedidos actualizada
+    else:
+        form = PedidosForm(instance=pedido)
+
+    return render(request, 'core/modificar_pedido.html', {'form': form, 'pedido': pedido})
+
+def eliminar_pedido(request, codigo_seguimiento):
+    pedido = get_object_or_404(Pedidos, codigo_seguimiento=codigo_seguimiento)
+    pedido.delete()
+    # Realiza cualquier acción adicional después de eliminar el pedido
+    return redirect('lista_pedidos')  # Redirige a la página de la lista de pedidos actualizada
+
+

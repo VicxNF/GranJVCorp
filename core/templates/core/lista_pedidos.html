@@ -33,20 +33,31 @@
                       <thead style="color: white;">
                       <tr style="color: white;">
                         <th>Código de seguimiento</th>
-                        <th>Nombre origen</th>
+                        <th>Nombre conductor</th>
                         <th>Dirección origen</th>
                         <th>Nombre destino</th>
                         <th>Dirección destino</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
                       </tr>
                       </thead>
                       <tbody style="color: white;">
                           {% for pedido in pedidos %}
                               <tr style="color: white;">
                                 <td style="color: white;">{{ pedido.codigo_seguimiento }}</td>
-                                <td style="color: white;">{{ pedido.nombre_origen }}</td>
+                                <td style="color: white;">{{ pedido.nombre_conductor }}</td>
                                 <td style="color: white;">{{ pedido.direccion_origen }}</td>
                                 <td style="color: white;">{{ pedido.nombre_destino }}</td>
                                 <td style="color: white;">{{ pedido.direccion_destino }}</td>
+                                <td style="color: white;">{{ pedido.estado }}</td>
+                                <td style="color: white;">
+                                    <!-- Botón Modificar -->
+                                    <a href="{% url 'modificar_pedido' pedido.codigo_seguimiento %}" class="btn btn-primary">Modificar</a>
+                    
+                                    <!-- Botón Eliminar -->
+                                    <a href="{% url 'eliminar_pedido' pedido.codigo_seguimiento %}" class="btn btn-danger">Eliminar</a>
+                    
+                                </td>
                               </tr>
                           {% endfor %}
                           </tbody>
