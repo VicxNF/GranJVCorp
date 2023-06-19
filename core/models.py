@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import random
 import string
+from django.utils import timezone
 
 class Producto(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -35,6 +36,7 @@ class Pedido(models.Model):
     direccion_envio = models.CharField(blank=True, max_length=70, verbose_name='Direccion del pedido')
     metodo_pago = models.CharField(max_length=100, choices=METODO_CHOICES, blank=True, verbose_name='Metodo de Pago')
     producto = models.ManyToManyField(Producto, blank=True)
+    fecha_pedido = models.DateTimeField(default=timezone.now, verbose_name='Fecha del Pedido')
     
     def calcular_total(self):
         return sum(producto.precio for producto in self.producto.all())
