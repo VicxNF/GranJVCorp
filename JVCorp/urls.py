@@ -61,6 +61,7 @@ urlpatterns = [
     path('generar_pedido/', generar_pedido, name='generar_pedido'),
     path('seguimiento_pedido/', seguimiento_pedido, name='seguimiento_pedido'),
     path('lista_pedidos/', lista_pedidos, name='lista_pedidos'),
+    path('enviar_correo/', enviar_correo, name='enviar_correo'),
 
 ]
     

@@ -13,8 +13,9 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework import status
 import smtplib
-from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils import timezone
@@ -266,3 +267,34 @@ def eliminar_pedido(request, codigo_seguimiento):
     return redirect('lista_pedidos')  # Redirige a la página de la lista de pedidos actualizada
 
 
+def enviar_correo(request):
+    if request.method == 'POST':
+        asunto = request.POST.get('asunto')
+        correo = request.POST.get('correo')
+        contenido = request.POST.get('contenido')
+        foto = request.FILES.get('foto')
+
+        # Crear el mensaje de correo electrónico
+        mensaje = MIMEMultipart()
+        mensaje['Subject'] = asunto
+        mensaje['From'] = 'victormanuelnf12@gmail.com'  # Reemplaza con tu dirección de correo
+        mensaje['To'] = correo
+
+        # Agregar el contenido del correo electrónico
+        mensaje.attach(MIMEText(contenido, 'plain'))
+
+        # Adjuntar la foto al correo electrónico
+        foto_adjunta = MIMEImage(foto.read())
+        foto_adjunta.add_header('Content-Disposition', 'attachment', filename='foto.jpg')
+        mensaje.attach(foto_adjunta)
+
+        # Enviar el correo electrónico
+        servidor_smtp = smtplib.SMTP('smtp.gmail.com', 587)  # Reemplaza con los detalles de tu servidor SMTP
+        servidor_smtp.starttls()
+        servidor_smtp.login('victormanuelnf12@gmail.com', 'wsodusmjigsdoiia')  # Reemplaza con tus credenciales de correo
+        servidor_smtp.send_message(mensaje)
+        servidor_smtp.quit()
+
+        return HttpResponse('Correo enviado exitosamente')
+    else:
+        return render(request, 'core/enviar_correo.html')

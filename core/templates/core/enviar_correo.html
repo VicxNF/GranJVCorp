@@ -1,0 +1,8 @@
+<form method="post" action="{% url 'enviar_correo' %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="text" name="asunto" placeholder="Asunto">
+  <input type="email" name="correo" placeholder="Correo de destino">
+  <textarea name="contenido" placeholder="Contenido"></textarea>
+  <input type="file" name="foto">
+  <button type="submit">Enviar</button>
+</form>
