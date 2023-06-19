@@ -36,7 +36,7 @@ class Pedido(models.Model):
     direccion_envio = models.CharField(blank=True, max_length=70, verbose_name='Direccion del pedido')
     metodo_pago = models.CharField(max_length=100, choices=METODO_CHOICES, blank=True, verbose_name='Metodo de Pago')
     producto = models.ManyToManyField(Producto, blank=True)
-    fecha_pedido = models.DateTimeField(default=timezone.now, verbose_name='Fecha del Pedido')
+    
     
     def calcular_total(self):
         return sum(producto.precio for producto in self.producto.all())
@@ -62,6 +62,7 @@ class Pedidos(models.Model):
     nombre_destino = models.CharField(max_length=100)
     direccion_destino = models.CharField(max_length=200)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='En preparacion', verbose_name='Estado del Pedido')
+    fecha_pedido = models.DateTimeField(default=timezone.now, verbose_name='Fecha del Pedido')
 
     def __str__(self):
         return self.codigo_seguimiento

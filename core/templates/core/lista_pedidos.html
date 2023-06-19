@@ -38,6 +38,7 @@
                         <th>Nombre destino</th>
                         <th>Dirección destino</th>
                         <th>Estado</th>
+                        <th>Fecha del Pedido</th>
                         <th>Acciones</th>
                       </tr>
                       </thead>
@@ -50,6 +51,7 @@
                                 <td style="color: white;">{{ pedido.nombre_destino }}</td>
                                 <td style="color: white;">{{ pedido.direccion_destino }}</td>
                                 <td style="color: white;">{{ pedido.estado }}</td>
+                                <td style="color: white;">{{ pedido.fecha_pedido }}</td>
                                 <td style="color: white;">
                                     <!-- Botón Modificar -->
                                     <a href="{% url 'modificar_pedido' pedido.codigo_seguimiento %}" class="btn btn-primary">Modificar</a>

@@ -17,6 +17,7 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from django.conf import settings
 from django.core.mail import EmailMessage
+from django.utils import timezone
 
 
 
@@ -187,7 +188,9 @@ def generar_pedido(request):
     if request.method == 'POST':
         form = PedidosForm(request.POST)
         if form.is_valid():
-            pedido = form.save()
+            pedido = form.save(commit=False)  # Guardar el formulario sin guardar en la base de datos todavía
+            pedido.fecha_pedido = timezone.now()  # Establecer la fecha del pedido como la fecha actual
+            pedido.save()
             # Realizar cualquier otra acción que necesites con el pedido creado
             return redirect(to= "lista_pedidos")  # Redirigir a la página de éxito o a otra vista
     else:
