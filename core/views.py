@@ -18,6 +18,7 @@ from email.mime.multipart import MIMEMultipart
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils import timezone
+from rest_framework.generics import GenericAPIView
 
 
 
@@ -25,6 +26,7 @@ from django.utils import timezone
 
 def home(request):
     return render(request, 'core/home.html')
+    
 
 @login_required()
 def mostrar_pedidos(request):
@@ -130,7 +132,7 @@ def perfil(request):
     return render(request, 'core/perfil.html')
 
 
-class PedidoView(viewsets.ModelViewSet):
+class PedidoView(GenericAPIView):
     serializer_class = PedidoSerializer
     queryset = Pedido.objects.all()
 

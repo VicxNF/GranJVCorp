@@ -21,12 +21,32 @@ from api.urls import *
 from api.views import *
 from rest_framework.documentation import include_docs_urls
 from django.contrib.auth import views as auth_view
+from rest_framework.schemas import get_schema_view
+from django.urls import re_path
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import routers, permissions
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title='Documentacion API',
+        default_version= 'v1',
+        description= 'Pedidos de GranJVCorp',
+        terms_of_service= 'https://www.google.com/policies/terms/',
+        contact= openapi.Contact(email="contact@snippets.local"),
+        license= openapi.License(name="BSD License"),
+    ),
+    public= True,
+    permission_classes=(permissions.AllowAny,),
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pedidos/', include('core.urls')),
+    path('documentacion/', schema_view.with_ui('swagger', cache_timeout=0), name='documentacion'),
     path('home/', home, name='home'),
-    path('docs/', include_docs_urls(title="Pedidos API")),
+    path('docs/', include_docs_urls(title="Pedidos API"), name='docs'),
     path('mostrar-pedidos/', mostrar_pedidos, name='mostrar_pedidos'),
     path('agregar-pedido/', agregar_pedido, name='agregar_pedido'),
     path('login/', auth_view.LoginView.as_view(template_name='core/login.html'), name='login'),

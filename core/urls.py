@@ -1,9 +1,26 @@
 from django.urls import path, include
 from .views import *
 from django.contrib.auth.decorators import login_required
-from rest_framework import routers
+from rest_framework import routers, permissions
 from django.contrib.auth import views as auth_view
 from rest_framework.documentation import include_docs_urls
+from django.contrib import admin
+from django.urls import re_path
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title='Documentacion API',
+        default_version= 'v1',
+        description= 'Pedidos de GranJVCorp',
+        terms_of_service= 'https://www.google.com/policies/terms/',
+        contact= openapi.Contact(email="contact@snippets.local"),
+        license= openapi.License(name="BSD License"),
+    ),
+    public= True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 
 router = routers.DefaultRouter()
@@ -12,8 +29,9 @@ router.register(r'pedidos', PedidosView,'pedidos')
 
 urlpatterns = [
     path('home/', home, name='home'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/v1/', include(router.urls), name='api-agregar-pedido'),
-    path('docs/', include_docs_urls(title="Pedidos API")),
+    path('docs/', include_docs_urls(title="Pedidos API"), name='docs'),
     path('mostrar-pedidos/', mostrar_pedidos, name='mostrar_pedidos'),
     path('agregar-pedido/', agregar_pedido, name='agregar_pedido'),
     path('login/', auth_view.LoginView.as_view(template_name='core/login.html'), name='login'),
