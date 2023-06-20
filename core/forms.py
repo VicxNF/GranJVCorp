@@ -1,17 +1,9 @@
 from django import forms
-from .models import Pedido, Pedidos
+from .models import Pedidos
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.forms.widgets import CheckboxSelectMultiple
-
-class PedidoForm(forms.ModelForm):
-    class Meta:
-        model = Pedido
-        fields = ['usuario', 'estado', 'direccion_envio', 'metodo_pago', 'codigo_seguimiento']
-        widgets = {
-            'producto': forms.CheckboxSelectMultiple()
-        }
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()

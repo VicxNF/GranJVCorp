@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from .models import *
-from .forms import UserRegisterForm, PedidoForm, PedidosForm
+from .forms import UserRegisterForm, PedidosForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -46,7 +46,7 @@ def register(request):
 
 @login_required()
 def administrador(request):
-    pedidos= Pedido.objects.all()
+    pedidos= Pedidos.objects.all()
     datos= {
         'pedidos': pedidos
     }
@@ -57,27 +57,6 @@ def administrador(request):
 def perfil(request):
     return render(request, 'core/perfil.html')
 
-
-class PedidoView(GenericAPIView):
-    serializer_class = PedidoSerializer
-    queryset = Pedido.objects.all()
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        # Obtenemos los IDs de los productos enviados en la solicitud
-        productos_ids = request.data.get('producto', [])
-
-        # Creamos el pedido
-        self.perform_create(serializer)
-
-        # Agregamos los productos al pedido
-        pedido = serializer.instance
-        pedido.producto.set(productos_ids)
-
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 def obtener_colaborador(request):

@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from core.models import Pedido
+from core.models import Pedidos
 
 
-class PedidoSerializer(serializers.ModelSerializer):
+class PedidosSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Pedido
+        model = Pedidos
         fields = '__all__'
