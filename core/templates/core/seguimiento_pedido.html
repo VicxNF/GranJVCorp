@@ -21,28 +21,45 @@
                     <a class="nav-link opcion-pedidos" href="{% url 'lista_pedidos' %}">Mostrar Pedidos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link add-pedidos" href="{% url 'rastrear_pedido' %}">Rastrear Pedido</a>
+                    <a class="nav-link add-pedidos" href="{% url 'seguimiento_pedido' %}">Rastrear Pedido</a>
                 </li>
             </ul>
         </div>
-        <form method="POST">
-            {% csrf_token %}
-            <label for="codigo_seguimiento">Código de Seguimiento:</label>
-            <input type="text" name="codigo_seguimiento" id="codigo_seguimiento" required>
-            <button type="submit">Buscar</button>
-            {% if estado_pedido %}
-                <h3 style="color: white;">Estado del pedido:</h3>
-                <p style="color: white;">{{ estado_pedido }}</p>
-                {% if direccion_origen %}
-                    <h4 style="color: white;">Dirección de origen:</h4>
-                    <p style="color: white;">{{ direccion_origen }}</p>
-                {% endif %}
-                {% if direccion_destino %}
-                    <h4 style="color: white;">Dirección de destino:</h4>
-                    <p style="color: white;">{{ direccion_destino }}</p>
-                {% endif %}
+        <div class="container">
+            <h1 class="mt-5" style="color: white;">Rastreo de Pedido</h1>
+        
+            {% if pedido %}
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Pedido {{ pedido.codigo_seguimiento }}</h5>
+                        <div class="progress-wrapper">
+                            <div class="progress mt-3">
+                                <div class="progress-bar" role="progressbar" style="width: {% if pedido.estado == 'En preparacion' %}33.33{% elif pedido.estado == 'En camino' %}66.66{% elif pedido.estado == 'Completado' %}100{% endif %}%" aria-valuenow="{% if pedido.estado == 'En preparacion' %}33.33{% elif pedido.estado == 'En camino' %}66.66{% elif pedido.estado == 'Completado' %}100{% endif %}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <span class="dot"></span>
+                            <i class="bi bi-box logo {% if pedido.estado != 'En preparacion' %}d-none{% endif %}"></i>
+                            <i class="bi bi-truck logo {% if pedido.estado != 'En camino' %}d-none{% endif %}"></i>
+                            <i class="bi bi-check-circle-fill logo {% if pedido.estado != 'Completado' %}d-none{% endif %}"></i>
+                        </div>
+                        <p class="mt-3"><strong>Estado:</strong> {{ pedido.estado }}</p>
+                        <p><strong>Dirección de Origen:</strong> {{ pedido.direccion_origen }}</p>
+                        <p><strong>Nombre de Destino:</strong> {{ pedido.nombre_destino }}</p>
+                        <p><strong>Dirección de Destino:</strong> {{ pedido.direccion_destino }}</p>
+                        <p><strong>Correo de Destino:</strong> {{ pedido.correo_destino }}</p>
+                        <p><strong>Fecha del Pedido:</strong> {{ pedido.fecha_pedido }}</p>
+                    </div>
+                </div>
+            {% else %}
+                <form method="post" action="" class="mt-4">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="codigo_seguimiento" class="form-label">Código de Seguimiento:</label>
+                        <input type="text" class="form-control" id="codigo_seguimiento" name="codigo_seguimiento" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Rastrear Pedido</button>
+                </form>
             {% endif %}
-        </form>
+        </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>

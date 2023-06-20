@@ -20,6 +20,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils import timezone
 from rest_framework.generics import GenericAPIView
+from rest_framework.decorators import api_view
 
 
 
@@ -27,83 +28,7 @@ from rest_framework.generics import GenericAPIView
 
 def home(request):
     return render(request, 'core/home.html')
-    
 
-@login_required()
-def mostrar_pedidos(request):
-    pedidos = Pedido.objects.all()
-    for pedido in pedidos:
-        total = 0
-        for producto in pedido.producto.all():
-            total += producto.precio
-        pedido.total = total
-
-    context = {
-        'pedidos': pedidos,
-    }
-
-    return render(request, 'core/mostrar_pedidos.html', context)
-
-
-@login_required
-def agregar_pedido(request):
-    response = requests.get('https://musicpro.bemtorres.win/api/v1/bodega/producto/')
-    data = response.json()
-    productos_api = data.get('productos', [])
-
-    if request.method == 'POST':
-        formulario = PedidoForm(request.POST)
-        if formulario.is_valid():
-            pedido = formulario.save(commit=False)
-            pedido.usuario = request.user
-
-            # Guardar el pedido sin los productos primero
-            pedido.save()
-
-            producto_ids = request.POST.getlist('producto_id')
-            productos_seleccionados = []
-
-            for producto_id in producto_ids:
-                # Buscar el producto correspondiente al ID en la lista de productos de la API
-                producto_seleccionado = next(
-                    (producto for producto in productos_api if producto['id'] == int(producto_id)), None)
-
-                if producto_seleccionado:
-                    # Obtener o crear el objeto Producto correspondiente al producto seleccionado
-                    producto, _ = Producto.objects.get_or_create(
-                        id=producto_seleccionado['id'],
-                        defaults={
-                            'codigo': producto_seleccionado['codigo'],
-                            'nombre': producto_seleccionado['nombre'],
-                            'descripcion': producto_seleccionado['descripcion'],
-                            'precio': producto_seleccionado['precio'],
-                            'asset': producto_seleccionado['asset'],
-                            'estado': producto_seleccionado['estado']
-                        }
-                    )
-
-                    productos_seleccionados.append(producto)
-
-            pedido.producto.set(productos_seleccionados)
-            pedido.save()
-
-            datos = {
-                'form': PedidoForm(),
-                'productos_api': productos_api,
-                'mensaje': "Registrado correctamente"
-            }
-
-            return redirect('mostrar_pedidos')
-
-    else:
-        formulario = PedidoForm()
-
-    datos = {
-        'form': formulario,
-        'productos_api': productos_api
-    }
-
-    return render(request, 'core/agregar_pedido.html', datos)
     
 def register(request):
     if request.method == 'POST':
@@ -175,18 +100,6 @@ def obtener_colaborador(request):
     return render(request, 'core/saludo.html', context)
 
 @login_required
-def rastrear_pedido(request):
-    pedido = None
-
-    if request.method == 'POST':
-        codigo_seguimiento = request.POST.get('codigo_seguimiento')
-        try:
-            pedido = Pedido.objects.get(codigo_seguimiento=codigo_seguimiento)
-        except Pedido.DoesNotExist:
-            pedido = None
-
-    return render(request, 'core/rastrear_pedido.html', {'pedido': pedido})
-
 def generar_pedido(request):
     if request.method == 'POST':
         form = PedidosForm(request.POST)
@@ -201,32 +114,20 @@ def generar_pedido(request):
 
     return render(request, 'core/generar_pedido.html', {'form': form})
 
+@login_required
 def seguimiento_pedido(request):
     if request.method == 'POST':
         codigo_seguimiento = request.POST.get('codigo_seguimiento')
-        # Realiza la solicitud GET a la API con el código de seguimiento
-        url_seguimiento = f'https://musicpro.bemtorres.win/api/v1/transporte/seguimiento/{codigo_seguimiento}'
-        response = requests.get(url_seguimiento)
+        try:
+            pedido = Pedidos.objects.get(codigo_seguimiento=codigo_seguimiento)
+            return render(request, 'core/seguimiento_pedido.html', {'pedido': pedido})
+        except Pedidos.DoesNotExist:
+            mensaje_error = 'Pedido no encontrado'
+            return render(request, 'core/seguimiento_pedido.html', {'error': mensaje_error})
+    else:
+        return render(request, 'core/seguimiento_pedido.html')
 
-        if response.status_code == 200:
-            result = response.json().get('result')
-            estado_pedido = result.get('estado')
-            solicitud = result.get('solicitud')
-            direccion_origen = solicitud.get('direccion_origen')
-            direccion_destino = solicitud.get('direccion_destino')
-
-            context = {
-                'estado_pedido': estado_pedido,
-                'direccion_origen': direccion_origen,
-                'direccion_destino': direccion_destino
-            }
-
-            return render(request, 'core/seguimiento_pedido.html', context)
-        else:
-            return HttpResponse("Error al obtener el estado del pedido")
-
-    return render(request, 'core/seguimiento_pedido.html')
-
+@login_required
 def lista_pedidos(request):
     pedidos = Pedidos.objects.all()
     return render(request, 'core/lista_pedidos.html', {'pedidos': pedidos})
@@ -245,7 +146,7 @@ class PedidosView(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
-
+@login_required
 def modificar_pedido(request, codigo_seguimiento):
     pedido = get_object_or_404(Pedidos, codigo_seguimiento=codigo_seguimiento)
 
@@ -260,6 +161,8 @@ def modificar_pedido(request, codigo_seguimiento):
 
     return render(request, 'core/modificar_pedido.html', {'form': form, 'pedido': pedido})
 
+
+@login_required
 def eliminar_pedido(request, codigo_seguimiento):
     pedido = get_object_or_404(Pedidos, codigo_seguimiento=codigo_seguimiento)
     pedido.delete()
@@ -267,6 +170,7 @@ def eliminar_pedido(request, codigo_seguimiento):
     return redirect('lista_pedidos')  # Redirige a la página de la lista de pedidos actualizada
 
 
+@login_required
 def enviar_correo(request):
     if request.method == 'POST':
         asunto = request.POST.get('asunto')
@@ -304,3 +208,12 @@ def completar_pedido(request, codigo_seguimiento):
     pedido.estado = 'Completado'
     pedido.save()
     return redirect('enviar_correo')
+
+@api_view(['GET'])
+def obtener_estado_pedido(request, codigo_seguimiento):
+    try:
+        pedido = Pedidos.objects.get(codigo_seguimiento=codigo_seguimiento)
+        estado = pedido.estado
+        return Response({'estado': estado})
+    except Pedidos.DoesNotExist:
+        return Response(status=404, data={'error': 'Pedido no encontrado'})
