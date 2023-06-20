@@ -291,7 +291,7 @@ def enviar_correo(request):
         # Enviar el correo electrónico
         servidor_smtp = smtplib.SMTP('smtp.gmail.com', 587)  # Reemplaza con los detalles de tu servidor SMTP
         servidor_smtp.starttls()
-        servidor_smtp.login('victormanuelnf12@gmail.com', 'wsodusmjigsdoiia')  # Reemplaza con tus credenciales de correo
+        servidor_smtp.login('granjvcorp@gmail.com', 'lrexvhtfrsdjgnek')  # Reemplaza con tus credenciales de correo
         servidor_smtp.send_message(mensaje)
         servidor_smtp.quit()
 
