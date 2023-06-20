@@ -61,6 +61,7 @@ class Pedidos(models.Model):
     direccion_origen = models.CharField(max_length=200)
     nombre_destino = models.CharField(max_length=100)
     direccion_destino = models.CharField(max_length=200)
+    correo_destino = models.EmailField(max_length=254, default='')
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='En preparacion', verbose_name='Estado del Pedido')
     fecha_pedido = models.DateTimeField(default=timezone.now, verbose_name='Fecha del Pedido')
 

@@ -23,4 +23,4 @@ class UserRegisterForm(UserCreationForm):
 class PedidosForm(forms.ModelForm):
     class Meta:
         model = Pedidos
-        fields = ['nombre_conductor', 'direccion_origen', 'nombre_destino', 'direccion_destino', 'estado']
+        fields = ['nombre_conductor', 'direccion_origen', 'nombre_destino', 'direccion_destino','correo_destino', 'estado']

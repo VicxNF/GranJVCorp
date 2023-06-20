@@ -16,10 +16,7 @@
           <div class="admin-sidebar bg-dark">
               <ul class="nav flex-column">
                   <li class="nav-item">
-                      <a class="nav-link active" href="{% url 'agregar_pedido' %}">Agregar Pedidos</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link opcion-pedidos" href="{% url 'mostrar_pedidos' %}">Mostrar Pedidos</a>
+                      <a class="nav-link opcion-pedidos" href="{% url 'lista_pedidos' %}">Mostrar Pedidos</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link add-pedidos" href="{% url 'rastrear_pedido' %}">Rastrear Pedido</a>
@@ -37,6 +34,7 @@
                         <th>Dirección origen</th>
                         <th>Nombre destino</th>
                         <th>Dirección destino</th>
+                        <th>Correo destino</th>
                         <th>Estado</th>
                         <th>Fecha del Pedido</th>
                         <th>Acciones</th>
@@ -50,6 +48,7 @@
                                 <td style="color: white;">{{ pedido.direccion_origen }}</td>
                                 <td style="color: white;">{{ pedido.nombre_destino }}</td>
                                 <td style="color: white;">{{ pedido.direccion_destino }}</td>
+                                <td style="color: white;">{{ pedido.correo_destino }}</td>
                                 <td style="color: white;">{{ pedido.estado }}</td>
                                 <td style="color: white;">{{ pedido.fecha_pedido }}</td>
                                 <td style="color: white;">

@@ -43,9 +43,9 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home, name='home'),
     path('pedidos/', include('core.urls')),
     path('documentacion/', schema_view.with_ui('swagger', cache_timeout=0), name='documentacion'),
-    path('home/', home, name='home'),
     path('docs/', include_docs_urls(title="Pedidos API"), name='docs'),
     path('mostrar-pedidos/', mostrar_pedidos, name='mostrar_pedidos'),
     path('agregar-pedido/', agregar_pedido, name='agregar_pedido'),
