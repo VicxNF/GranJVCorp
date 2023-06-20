@@ -58,6 +58,10 @@
                     
                                     <!-- Botón Eliminar -->
                                     <a href="{% url 'eliminar_pedido' pedido.codigo_seguimiento %}" class="btn btn-danger">Eliminar</a>
+
+                                    {% if pedido.estado != 'Completado' %}
+                                        <a href="{% url 'completar_pedido' pedido.codigo_seguimiento %}" class="btn btn-success">Completar Pedido</a>
+                                    {% endif %}
                     
                                 </td>
                               </tr>

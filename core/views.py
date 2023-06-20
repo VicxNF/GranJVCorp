@@ -295,6 +295,12 @@ def enviar_correo(request):
         servidor_smtp.send_message(mensaje)
         servidor_smtp.quit()
 
-        return HttpResponse('Correo enviado exitosamente')
+        return redirect('lista_pedidos')
     else:
         return render(request, 'core/enviar_correo.html')
+
+def completar_pedido(request, codigo_seguimiento):
+    pedido = Pedidos.objects.get(codigo_seguimiento=codigo_seguimiento)
+    pedido.estado = 'Completado'
+    pedido.save()
+    return redirect('enviar_correo')
