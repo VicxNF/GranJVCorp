@@ -193,6 +193,13 @@ def obtener_estado_pedido(request, codigo_seguimiento):
     try:
         pedido = Pedidos.objects.get(codigo_seguimiento=codigo_seguimiento)
         estado = pedido.estado
-        return Response({'estado': estado})
+        direccion_origen = pedido.direccion_origen
+        direccion_destino = pedido.direccion_destino
+
+        return Response({
+            'estado': estado,
+            'direccion_origen': direccion_origen,
+            'direccion_destino': direccion_destino
+        })
     except Pedidos.DoesNotExist:
         return Response(status=404, data={'error': 'Pedido no encontrado'})
