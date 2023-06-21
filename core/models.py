@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 import random
 import string
 from django.utils import timezone
+import random
+import string
+from faker import Faker
 
 class Pedidos(models.Model):
     ESTADO_CHOICES = (
@@ -30,5 +33,10 @@ class Pedidos(models.Model):
                 codigo = 'JV' + ''.join(random.choices(string.digits, k=5))
 
             self.codigo_seguimiento = codigo
+
+        if not self.nombre_conductor:
+            # Generar un nombre de conductor aleatorio con faker
+            fake = Faker()
+            self.nombre_conductor = fake.name()
 
         super().save(*args, **kwargs)
