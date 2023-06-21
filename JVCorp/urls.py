@@ -61,6 +61,8 @@ urlpatterns = [
     path('enviar_correo/', enviar_correo, name='enviar_correo'),
     path('completar_pedido/<str:codigo_seguimiento>/', completar_pedido, name='completar_pedido'),
     path('pedidos/estado/<str:codigo_seguimiento>/', obtener_estado_pedido, name='obtener_estado_pedido'),
+    path('generar_pedidos_falsos/', generar_pedidos_falsos, name='generar_pedidos_falsos'),
+    path('eliminar_pedidos_falsos/', eliminar_pedidos_falsos, name='eliminar_pedidos_falsos'),
 
 ]
     

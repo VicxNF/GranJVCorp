@@ -21,6 +21,9 @@ from django.core.mail import EmailMessage
 from django.utils import timezone
 from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import api_view
+import random
+import string
+from faker import Faker
 
 
 
@@ -203,3 +206,41 @@ def obtener_estado_pedido(request, codigo_seguimiento):
         })
     except Pedidos.DoesNotExist:
         return Response(status=404, data={'error': 'Pedido no encontrado'})
+    
+fake = Faker()
+
+def generar_pedidos_falsos(request):
+    for _ in range(100):
+        nombre_conductor = fake.name()
+        direccion_origen = fake.address()
+        nombre_destino = fake.name()
+        direccion_destino = fake.address()
+        correo_destino = fake.email()
+        estado = random.choice(['En preparacion', 'En camino', 'Completado'])
+
+        pedido = Pedidos(
+            nombre_conductor=nombre_conductor,
+            direccion_origen=direccion_origen,
+            nombre_destino=nombre_destino,
+            direccion_destino=direccion_destino,
+            correo_destino=correo_destino,
+            estado=estado
+        )
+        pedido.save()
+
+    return render(request, 'core/generar_pedidos_falsos.html')
+
+def eliminar_pedidos_falsos(request):
+    criterios = {
+        'estado': 'En preparacion', 
+        'estado': 'En camino',
+        'estado': 'Completado',
+    }
+
+    # Obtener los pedidos falsos basados en los criterios
+    pedidos_falsos = Pedidos.objects.filter(**criterios)
+
+    # Eliminar los pedidos falsos
+    pedidos_falsos.delete()
+
+    return redirect('lista_pedidos') 
