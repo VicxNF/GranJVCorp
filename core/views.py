@@ -163,7 +163,7 @@ def enviar_correo(request):
         # Crear el mensaje de correo electrónico
         mensaje = MIMEMultipart()
         mensaje['Subject'] = asunto
-        mensaje['From'] = 'victormanuelnf12@gmail.com'  # Reemplaza con tu dirección de correo
+        mensaje['From'] = 'granjvcorp@gmail.com'  # Reemplaza con tu dirección de correo
         mensaje['To'] = correo
 
         # Agregar el contenido del correo electrónico
@@ -171,7 +171,7 @@ def enviar_correo(request):
 
         # Adjuntar la foto al correo electrónico
         foto_adjunta = MIMEImage(foto.read())
-        foto_adjunta.add_header('Content-Disposition', 'attachment', filename='foto.jpg')
+        foto_adjunta.add_header('Content-Disposition', 'attachment', filename='pedido.jpg')
         mensaje.attach(foto_adjunta)
 
         # Enviar el correo electrónico

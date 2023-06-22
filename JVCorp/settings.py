@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-a1=8z$^$m^m_cnu@b2()q%02l_l8947r99ic$ah9h5@s0%sebr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ '.vercel.app', '.now.sh' ]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -146,7 +146,3 @@ LOGIN_URL = 'login'
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
-
-import os
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
