@@ -1,85 +1,80 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
 
-  {% extends 'core/base.html' %}
-  {% block content %}
-  {% load static %}
-  
-  <!DOCTYPE html>
-  <html>
-  <head>
-      <title>Página de Administrador</title>
-      <link rel="stylesheet" type="text/css" href="{% static 'core/css/admin.css' %}">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-      <!-- Agrega aquí tus enlaces a las hojas de estilo adicionales si las tienes -->
-  </head>
-  <body>
-      <div class="admin-container">
-          <div class="admin-sidebar bg-dark">
-              <ul class="nav flex-column">
-                  <li class="nav-item">
-                      <a class="nav-link opcion-pedidos" href="{% url 'lista_pedidos' %}">Mostrar Pedidos</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link add-pedidos" href="{% url 'seguimiento_pedido' %}">Rastrear Pedido</a>
-                  </li>
-              </ul>
-          </div>
-          <div class="admin-content">
-              <div id="pedidos" class="contenido-pedidos">
-                  <h3 style="color: white;">Pedidos</h3>
-                  <table class="table table-striped">
-                      <thead style="color: white;">
-                      <tr style="color: white;">
-                        <th>Código de seguimiento</th>
-                        <th>Nombre conductor</th>
-                        <th>Dirección origen</th>
-                        <th>Nombre destino</th>
-                        <th>Dirección destino</th>
-                        <th>Correo destino</th>
-                        <th>Estado</th>
-                        <th>Fecha del Pedido</th>
-                        <th>Acciones</th>
-                      </tr>
-                      </thead>
-                      <tbody style="color: white;">
-                          {% for pedido in pedidos %}
-                              <tr style="color: white;">
-                                <td style="color: white;">{{ pedido.codigo_seguimiento }}</td>
-                                <td style="color: white;">{{ pedido.nombre_conductor }}</td>
-                                <td style="color: white;">{{ pedido.direccion_origen }}</td>
-                                <td style="color: white;">{{ pedido.nombre_destino }}</td>
-                                <td style="color: white;">{{ pedido.direccion_destino }}</td>
-                                <td style="color: white;">{{ pedido.correo_destino }}</td>
-                                <td style="color: white;">{{ pedido.estado }}</td>
-                                <td style="color: white;">{{ pedido.fecha_pedido }}</td>
-                                <td style="color: white;">
-                                    <!-- Botón Modificar -->
-                                    <a href="{% url 'modificar_pedido' pedido.codigo_seguimiento %}" class="btn btn-primary">Modificar</a>
-                    
-                                    <!-- Botón Eliminar -->
-                                    <a href="{% url 'eliminar_pedido' pedido.codigo_seguimiento %}" class="btn btn-danger">Eliminar</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página de Administrador</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'core/css/admin.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <!-- Agrega aquí tus enlaces a las hojas de estilo adicionales si las tienes -->
+    
+    <style>
+        .blur-in-expand {
+            animation: blur-in-expand 0.7s linear both;
+        }
 
-                                    {% if pedido.estado != 'Completado' %}
-                                        <a href="{% url 'completar_pedido' pedido.codigo_seguimiento %}" class="btn btn-success">Completar Pedido</a>
-                                    {% endif %}
-                    
-                                </td>
-                              </tr>
-                          {% endfor %}
-                          </tbody>
-                  </table>
-                  <a href="{% url 'generar_pedido' %}" class="btn btn-success">Nuevo Pedido</a>
-                  <br><br>
-              </div>
-          </div>
-      </div>
-      
-  
-      <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
-      <!-- Agrega aquí tus enlaces a los scripts adicionales si los tienes -->
-  
-  </body>
-  </html>
-  {% endblock content %}
-  
+        @keyframes blur-in-expand {
+            0% {
+                transform: scale(0);
+                filter: blur(12px);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                filter: blur(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-sidebar bg-dark">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link opcion-pedidos" href="{% url 'lista_pedidos' %}">Mostrar Pedidos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link add-pedidos" href="{% url 'seguimiento_pedido' %}">Rastrear Pedido</a>
+                </li>
+            </ul>
+        </div>
+        <div class="admin-content">
+            <div id="pedidos" class="contenido-pedidos">
+                <h3 style="color: white;">Pedidos</h3>
+                <div class="row">
+                    {% for pedido in pedidos %}
+                    <div class="col-md-4">
+                        <div class="card blur-in-expand">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ pedido.codigo_seguimiento }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ pedido.nombre_destino }}</h6>
+                                <p class="card-text">Direccion de destino: {{ pedido.direccion_destino }}</p>
+                                <p class="card-text">Estado: {{ pedido.estado }}</p>
+                                <p class="card-text">Fecha del Pedido: {{ pedido.fecha_pedido }}</p>
+                                <a href="{% url 'modificar_pedido' pedido.codigo_seguimiento %}" class="btn btn-primary">Modificar</a>
+                                <a href="{% url 'eliminar_pedido' pedido.codigo_seguimiento %}" class="btn btn-danger">Eliminar</a>
+                                {% if pedido.estado != 'Completado' %}
+                                <a href="{% url 'completar_pedido' pedido.codigo_seguimiento %}" class="btn btn-success">Completar Pedido</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'generar_pedido' %}" class="btn btn-success">Nuevo Pedido</a>
+                <br><br>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <!-- Agrega aquí tus enlaces a los scripts adicionales si los tienes -->
+
+</body>
+</html>
+{% endblock content %}
