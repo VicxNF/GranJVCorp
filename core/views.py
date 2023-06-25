@@ -86,11 +86,10 @@ def generar_pedido(request):
     if request.method == 'POST':
         form = PedidosForm(request.POST)
         if form.is_valid():
-            pedido = form.save(commit=False)  # Guardar el formulario sin guardar en la base de datos todavía
-            pedido.fecha_pedido = timezone.now()  # Establecer la fecha del pedido como la fecha actual
+            pedido = form.save(commit=False)
+            pedido.fecha_pedido = timezone.now()
             pedido.save()
-            # Realizar cualquier otra acción que necesites con el pedido creado
-            return redirect(to= "lista_pedidos")  # Redirigir a la página de éxito o a otra vista
+            return redirect('lista_pedidos')  # Redirige a la página de éxito o a otra vista
     else:
         form = PedidosForm()
 
@@ -112,7 +111,8 @@ def seguimiento_pedido(request):
 @login_required
 def lista_pedidos(request):
     pedidos = Pedidos.objects.all()
-    return render(request, 'core/lista_pedidos.html', {'pedidos': pedidos})
+    form = PedidosForm()  # Crear una instancia del formulario vacío
+    return render(request, 'core/lista_pedidos.html', {'pedidos': pedidos, 'form': form})
 
 class PedidosView(viewsets.ModelViewSet):
     serializer_class = PedidosSerializer
