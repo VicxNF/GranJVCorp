@@ -28,6 +28,17 @@
                 opacity: 1;
             }
         }
+
+        .scale-up-center{
+            animation:scale-up-center 0.8s; 
+        } 
+        @keyframes scale-up-center{ 
+            0%{transform:scale(.5)}
+            100%{transform:scale(1)} 
+        }
+        .modal-content {
+            background-color: #222; /* Cambia este valor al color deseado */
+        }
     </style>
 </head>
 <body>
@@ -77,11 +88,11 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="addPedidoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade scale-up-center" id="addPedidoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" style="color: white;" id="exampleModalLabel">Generar Pedido</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
