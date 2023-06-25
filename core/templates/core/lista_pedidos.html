@@ -47,7 +47,7 @@
                 <div class="row">
                     {% for pedido in pedidos %}
                     <div class="col-md-4">
-                        <div class="card blur-in-expand">
+                        <div class="card blur-in-expand" onclick="mostrarDetallesPedido('{{ pedido.codigo_seguimiento }}', '{{ pedido.nombre_destino }}', '{{ pedido.direccion_destino }}', '{{ pedido.estado }}', '{{ pedido.fecha_pedido }}')">
                             <div class="card-body">
                                 <h5 class="card-title">{{ pedido.codigo_seguimiento }}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">{{ pedido.nombre_destino }}</h6>
@@ -70,11 +70,44 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
-    <!-- Agrega aquí tus enlaces a los scripts adicionales si los tienes -->
-
+    <!-- Modal -->
+<div class="modal fade" id="pedidoModal" tabindex="-1" role="dialog" aria-labelledby="pedidoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pedidoModalLabel">Detalles del Pedido</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Código de Seguimiento:</strong> <span id="codigoSeguimiento"></span></p>
+          <p><strong>Nombre de Destino:</strong> <span id="nombreDestino"></span></p>
+          <p><strong>Dirección de Destino:</strong> <span id="direccionDestino"></span></p>
+          <p><strong>Estado:</strong> <span id="estado"></span></p>
+          <p><strong>Fecha del Pedido:</strong> <span id="fechaPedido"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+  
+  <script>
+    function mostrarDetallesPedido(codigoSeguimiento, nombreDestino, direccionDestino, estado, fechaPedido) {
+      $('#codigoSeguimiento').text(codigoSeguimiento);
+      $('#nombreDestino').text(nombreDestino);
+      $('#direccionDestino').text(direccionDestino);
+      $('#estado').text(estado);
+      $('#fechaPedido').text(fechaPedido);
+      $('#pedidoModal').modal('show');
+    }
+  </script>
 </body>
 </html>
 {% endblock content %}
