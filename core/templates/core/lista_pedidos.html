@@ -38,6 +38,13 @@
         }
         .modal-content {
             background-color: #222; /* Cambia este valor al color deseado */
+        
+            
+        }
+        .pedido-imagen {
+            width: 100%; /* Ajusta el ancho de la imagen al 100% del contenedor */
+            height: auto; /* Permite que la altura se ajuste proporcionalmente */
+            object-fit: cover; /* Ajusta la imagen para cubrir el contenedor */
         }
     </style>
 </head>
@@ -63,6 +70,13 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ pedido.codigo_seguimiento }}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">{{ pedido.nombre_destino }}</h6>
+                                {% if pedido.estado == "En preparacion" %}
+                                    <img src="{% static 'core/images/en_preparacion.jpg' %}" alt="En preparación" class="pedido-imagen"> 
+                                {% elif pedido.estado == "En camino" %}
+                                    <img src="{% static 'core/images/en_camino.jpg' %}" alt="En camino" class="pedido-imagen">
+                                {% elif pedido.estado == "Completado" %}
+                                    <img src="{% static 'core/images/completado.webp' %}" alt="Completado" class="pedido-imagen">
+                                {% endif %}
                                 <p class="card-text">Direccion de destino: {{ pedido.direccion_destino }}</p>
                                 <p class="card-text">Nombre del conductor: {{ pedido.nombre_conductor }}</p>
                                 <p class="card-text">Estado: {{ pedido.estado }}</p>
