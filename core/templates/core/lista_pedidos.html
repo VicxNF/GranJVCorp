@@ -59,7 +59,7 @@
                 <div class="row">
                     {% for pedido in pedidos %}
                     <div class="col-md-4">
-                        <div class="card blur-in-expand" onclick="mostrarDetallesPedido('{{ pedido.codigo_seguimiento }}', '{{ pedido.nombre_destino }}', '{{ pedido.direccion_destino }}', '{{ pedido.estado }}', '{{ pedido.fecha_pedido }}')">
+                        <div class="card blur-in-expand">
                             <div class="card-body">
                                 <h5 class="card-title">{{ pedido.codigo_seguimiento }}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">{{ pedido.nombre_destino }}</h6>
@@ -70,7 +70,7 @@
                                 <a href="{% url 'modificar_pedido' pedido.codigo_seguimiento %}" class="btn btn-primary">Modificar</a>
                                 <a href="{% url 'eliminar_pedido' pedido.codigo_seguimiento %}" class="btn btn-danger">Eliminar</a>
                                 {% if pedido.estado != 'Completado' %}
-                                <a href="{% url 'completar_pedido' pedido.codigo_seguimiento %}" class="btn btn-success">Completar Pedido</a>
+                                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#enviarCorreoModal{{ pedido.codigo_seguimiento }}">Completar Pedido</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -107,6 +107,30 @@
             </div>
         </div>
     </div>
+
+    {% for pedido in pedidos %}
+    <div class="modal fade" id="enviarCorreoModal{{ pedido.codigo_seguimiento }}" tabindex="-1" aria-labelledby="enviarCorreoModalLabel{{ pedido.codigo_seguimiento }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="enviarCorreoModalLabel{{ pedido.codigo_seguimiento }}">Enviar Correo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'enviar_correo' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="codigo_seguimiento" value="{{ pedido.codigo_seguimiento }}">
+            <input type="text" name="asunto" placeholder="Asunto">
+            <input type="email" name="correo" placeholder="Correo de destino">
+            <textarea name="contenido" placeholder="Contenido"></textarea>
+            <input type="file" name="foto">
+            <button type="submit">Enviar</button>
+        </form>
+        </div>
+        </div>
+    </div>
+    </div>
+    {% endfor %}
 
   
   <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>

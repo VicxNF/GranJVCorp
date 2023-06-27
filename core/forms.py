@@ -16,3 +16,4 @@ class PedidosForm(forms.ModelForm):
     class Meta:
         model = Pedidos
         fields = ['direccion_origen', 'nombre_destino', 'direccion_destino','correo_destino', 'estado']
+

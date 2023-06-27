@@ -29,6 +29,7 @@ from faker import Faker
 
 
 
+
 def home(request):
     return render(request, 'core/home.html')
 
@@ -155,6 +156,7 @@ def eliminar_pedido(request, codigo_seguimiento):
 @login_required
 def enviar_correo(request):
     if request.method == 'POST':
+        codigo_seguimiento = request.POST.get('codigo_seguimiento')
         asunto = request.POST.get('asunto')
         correo = request.POST.get('correo')
         contenido = request.POST.get('contenido')
@@ -181,15 +183,20 @@ def enviar_correo(request):
         servidor_smtp.send_message(mensaje)
         servidor_smtp.quit()
 
-        return redirect('lista_pedidos')
+        return redirect('completar_pedido', codigo_seguimiento=codigo_seguimiento)
     else:
         return render(request, 'core/enviar_correo.html')
 
 def completar_pedido(request, codigo_seguimiento):
-    pedido = Pedidos.objects.get(codigo_seguimiento=codigo_seguimiento)
-    pedido.estado = 'Completado'
-    pedido.save()
-    return redirect('enviar_correo')
+    try:
+        pedido = Pedidos.objects.get(codigo_seguimiento=codigo_seguimiento)
+        pedido.estado = 'Completado'
+        pedido.save()
+    except Pedidos.DoesNotExist:
+        # Manejar el caso en el que no se encuentre el pedido
+        pass
+
+    return redirect('lista_pedidos')
 
 @api_view(['GET'])
 def obtener_estado_pedido(request, codigo_seguimiento):
