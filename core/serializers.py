@@ -13,4 +13,5 @@ class PedidosSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'codigo_seguimiento': {'read_only': True},
             'nombre_conductor': {'read_only': True},
+            'estado': {'read_only': True},
         }
