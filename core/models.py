@@ -18,10 +18,12 @@ class Pedidos(models.Model):
         ('Sucursal', 'Sucursal'),
     )
     codigo_seguimiento = models.CharField(primary_key=True, unique=True, max_length=50)
-    nombre_conductor = models.CharField(max_length=100)
+    nombre_conductor = models.CharField(max_length=100, default='')
     lugar_origen = models.CharField(max_length=20, choices=LUGAR_ORIGEN, default='Bodega', verbose_name='Lugar de origen')
-    nombre_destino = models.CharField(max_length=100)
-    direccion_destino = models.CharField(max_length=200)
+    nombre_origen = models.CharField(max_length=100, default='')
+    direccion_origen = models.CharField(max_length=100, default='')
+    nombre_destino = models.CharField(max_length=100, default='')
+    direccion_destino = models.CharField(max_length=200, default='')
     correo_destino = models.EmailField(max_length=254, default='')
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='En preparacion', verbose_name='Estado del Pedido')
 
