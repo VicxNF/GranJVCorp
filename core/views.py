@@ -48,18 +48,8 @@ def register(request):
 
     return render(request, 'core/register.html',{'form':form})
 
-@login_required()
-def administrador(request):
-    pedidos= Pedidos.objects.all()
-    datos= {
-        'pedidos': pedidos
-    }
-    return render(request, 'core/administrador.html', datos)
 
 
-@login_required()
-def perfil(request):
-    return render(request, 'core/perfil.html')
 
 
 
