@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from .models import *
-from .forms import UserRegisterForm, PedidosForm
+from .forms import *
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -102,12 +102,13 @@ def seguimiento_pedido(request):
         codigo_seguimiento = request.POST.get('codigo_seguimiento')
         try:
             pedido = Pedidos.objects.get(codigo_seguimiento=codigo_seguimiento)
-            return render(request, 'core/seguimiento_pedido.html', {'pedido': pedido})
+            return render(request, 'core/seguimiento_pedido.html', {'pedido': pedido, 'modal': True})
         except Pedidos.DoesNotExist:
             mensaje_error = 'Pedido no encontrado'
             return render(request, 'core/seguimiento_pedido.html', {'error': mensaje_error})
     else:
-        return render(request, 'core/seguimiento_pedido.html')
+        return render(request, 'core/seguimiento_pedido.html', {'modal': False})
+
 
 @login_required
 def lista_pedidos(request):
@@ -129,20 +130,20 @@ class PedidosView(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
-@login_required
 def modificar_pedido(request, codigo_seguimiento):
     pedido = get_object_or_404(Pedidos, codigo_seguimiento=codigo_seguimiento)
 
     if request.method == 'POST':
-        form = PedidosForm(request.POST, instance=pedido)
+        form = ModificarPedidosForm(request.POST, instance=pedido)
         if form.is_valid():
             form.save()
             # Realiza cualquier acción adicional después de modificar el pedido
             return redirect('lista_pedidos')  # Redirige a la página de la lista de pedidos actualizada
     else:
-        form = PedidosForm(instance=pedido)
+        form = ModificarPedidosForm(instance=pedido)
 
     return render(request, 'core/modificar_pedido.html', {'form': form, 'pedido': pedido})
+
 
 
 @login_required

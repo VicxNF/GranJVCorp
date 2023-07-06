@@ -49,17 +49,6 @@
     </style>
 </head>
 <body>
-    <div class="admin-container">
-        <div class="admin-sidebar bg-dark">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link opcion-pedidos" href="{% url 'lista_pedidos' %}">Mostrar Pedidos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link add-pedidos" href="{% url 'seguimiento_pedido' %}">Rastrear Pedido</a>
-                </li>
-            </ul>
-        </div>
         <div class="admin-content">
             <div id="pedidos" class="contenido-pedidos">
                 <h3 style="color: white;">Pedidos</h3>
@@ -78,6 +67,8 @@
                                     <img src="{% static 'core/images/completado.webp' %}" alt="Completado" class="pedido-imagen">
                                 {% endif %}
                                 <p class="card-text">Lugar de origen: {{ pedido.lugar_origen }}</p>
+                                <p class="card-text">Nombre de origen: {{ pedido.nombre_origen }}</p>
+                                <p class="card-text">Direccion de origen: {{ pedido.direccion_origen }}</p>
                                 <p class="card-text">Direccion de destino: {{ pedido.direccion_destino }}</p>
                                 <p class="card-text">Nombre del conductor: {{ pedido.nombre_conductor }}</p>
                                 <p class="card-text">Estado: {{ pedido.estado }}</p>
@@ -124,27 +115,43 @@
 
     {% for pedido in pedidos %}
     <div class="modal fade" id="enviarCorreoModal{{ pedido.codigo_seguimiento }}" tabindex="-1" aria-labelledby="enviarCorreoModalLabel{{ pedido.codigo_seguimiento }}" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="enviarCorreoModalLabel{{ pedido.codigo_seguimiento }}">Enviar Correo</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form action="{% url 'enviar_correo' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="hidden" name="codigo_seguimiento" value="{{ pedido.codigo_seguimiento }}">
-            <input type="text" name="asunto" placeholder="Asunto">
-            <input type="email" name="correo" placeholder="Correo de destino">
-            <textarea name="contenido" placeholder="Contenido"></textarea>
-            <input type="file" name="foto">
-            <button type="submit">Enviar</button>
-        </form>
-        </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 style="color: white;" class="modal-title" id="enviarCorreoModalLabel{{ pedido.codigo_seguimiento }}">Enviar Correo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'enviar_correo' %}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <input type="hidden" name="codigo_seguimiento" value="{{ pedido.codigo_seguimiento }}">
+                        <div class="mb-3">
+                            <label for="asunto" class="form-label">Asunto</label>
+                            <input type="text" name="asunto" id="asunto" class="form-control" placeholder="Asunto" required>
+                            <div class="invalid-feedback">Por favor, ingresa el asunto.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="correo" class="form-label">Correo de destino</label>
+                            <input type="email" name="correo" id="correo" class="form-control" placeholder="Correo de destino" required>
+                            <div class="invalid-feedback">Por favor, ingresa un correo válido.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contenido" class="form-label">Contenido</label>
+                            <textarea name="contenido" id="contenido" class="form-control" placeholder="Contenido" required></textarea>
+                            <div class="invalid-feedback">Por favor, ingresa el contenido del correo.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="foto" class="form-label">Foto adjunta</label>
+                            <input type="file" name="foto" id="foto" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-    {% endfor %}
+{% endfor %}
+
 
   
   <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>

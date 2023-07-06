@@ -11,17 +11,6 @@
     <!-- Agrega aquí tus enlaces a las hojas de estilo adicionales si las tienes -->
 </head>
 <body>
-    <div class="admin-container">
-        <div class="admin-sidebar bg-dark">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link opcion-pedidos" href="{% url 'lista_pedidos' %}">Mostrar Pedidos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link add-pedidos" href="{% url 'seguimiento_pedido' %}">Rastrear Pedido</a>
-                </li>
-            </ul>
-        </div>
         <div class="admin-content">
             <div id="agregar_pedidos" class="agregar-pedidos">
                 <h3 style="color: white;">Agregar Pedidos</h3>
@@ -33,11 +22,7 @@
 
             <input type="submit" class="btn btn-danger" id="enviar" value="Modificar">
             <input type="reset" class="btn btn-primary" id="limpiar" value="Limpiar">
-            <div id="error" class="alert alert-danger" role="alert"></div>
         </form>
-        <div class="alert alert-success" role="alert">
-            {{mensaje}}
-        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>

@@ -11,17 +11,6 @@
     <!-- Agrega aquí tus enlaces a las hojas de estilo adicionales si las tienes -->
 </head>
 <body>
-    <div class="admin-container">
-        <div class="admin-sidebar bg-dark">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link opcion-pedidos" href="{% url 'lista_pedidos' %}">Mostrar Pedidos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link add-pedidos" href="{% url 'seguimiento_pedido' %}">Rastrear Pedido</a>
-                </li>
-            </ul>
-        </div>
         <form method="post" action="{% url 'enviar_correo' %}" enctype="multipart/form-data">
           {% csrf_token %}
           <input type="text" name="asunto" placeholder="Asunto">
