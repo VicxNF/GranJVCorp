@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from .models import *
 from .forms import *
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -26,31 +26,41 @@ import string
 from faker import Faker
 
 
+User = get_user_model()
 
 
+
+
+
+    
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('lista_pedidos')
+    else:
+        form = LoginForm()
+    return render(request, 'core/login.html', {'form': form})
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = RegistrationForm()
+    return render(request, 'core/register.html', {'form': form})
 
 
 def home(request):
     return render(request, 'core/home.html')
-
-    
-def register(request):
-    if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Bienvenido {username}, tu cuenta fue creada exitosamente')
-            return redirect('home')
-    else:
-        form = UserRegisterForm()
-
-
-    return render(request, 'core/register.html',{'form':form})
-
-
-
-
 
 
 def obtener_colaborador(request):
