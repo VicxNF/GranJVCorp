@@ -17,26 +17,29 @@
             <h1 class="mt-5" style="color: white;">Rastreo de Pedido</h1>
         
             {% if pedido %}
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Pedido {{ pedido.codigo_seguimiento }}</h5>
-                        <div class="progress-wrapper">
-                            <div class="progress mt-3">
-                                <div class="progress-bar" role="progressbar" style="width: {% if pedido.estado == 'En preparacion' %}33.33{% elif pedido.estado == 'En camino' %}66.66{% elif pedido.estado == 'Completado' %}100{% endif %}%" aria-valuenow="{% if pedido.estado == 'En preparacion' %}33.33{% elif pedido.estado == 'En camino' %}66.66{% elif pedido.estado == 'Completado' %}100{% endif %}" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Pedido {{ pedido.codigo_seguimiento }}</h5>
+                    <div class="progress-wrapper">
+                        <div class="progress mt-3">
+                            <div class="progress-bar {% if pedido.estado == 'En preparacion' %}bg-info{% elif pedido.estado == 'En camino' %}bg-warning{% elif pedido.estado == 'Completado' %}bg-success{% endif %}" role="progressbar" style="width: {% if pedido.estado == 'En preparacion' %}0{% elif pedido.estado == 'En camino' %}50{% elif pedido.estado == 'Completado' %}100{% endif %}%" aria-valuenow="{% if pedido.estado == 'En preparacion' %}0{% elif pedido.estado == 'En camino' %}50{% elif pedido.estado == 'Completado' %}100{% endif %}" aria-valuemin="0" aria-valuemax="100">
                             </div>
-                            <span class="dot"></span>
-                            <i class="bi bi-box logo {% if pedido.estado != 'En preparacion' %}d-none{% endif %}"></i>
-                            <i class="bi bi-truck logo {% if pedido.estado != 'En camino' %}d-none{% endif %}"></i>
-                            <i class="bi bi-check-circle-fill logo {% if pedido.estado != 'Completado' %}d-none{% endif %}"></i>
                         </div>
-                        <p class="mt-3"><strong>Estado:</strong> {{ pedido.estado }}</p>
-                        <p><strong>Dirección de Origen:</strong> {{ pedido.direccion_origen }}</p>
-                        <p><strong>Nombre de Destino:</strong> {{ pedido.nombre_destino }}</p>
-                        <p><strong>Dirección de Destino:</strong> {{ pedido.direccion_destino }}</p>
-                        <p><strong>Correo de Destino:</strong> {{ pedido.correo_destino }}</p>
-                        <p><strong>Fecha del Pedido:</strong> {{ pedido.fecha_pedido }}</p>
+                        <span class="dot"></span>
+                        <i class="bi bi-box logo {% if pedido.estado != 'En preparacion' %}d-none{% endif %}"></i>
+                        <i class="bi bi-truck logo {% if pedido.estado == 'En preparacion' or pedido.estado == 'Completado' %}d-none{% endif %}" style="left: 50%; transform: translateX(-50%);"></i>
+                        <i class="bi bi-check-circle-fill logo {% if pedido.estado != 'Completado' %}d-none{% endif %}" style="left: 100%; transform: translateX(-50%);"></i>
                     </div>
+                    <p class="mt-3"><strong>Estado:</strong> {{ pedido.estado }}</p>
+                    <p><strong>Dirección de Origen:</strong> {{ pedido.direccion_origen }}</p>
+                    <p><strong>Nombre de Destino:</strong> {{ pedido.nombre_destino }}</p>
+                    <p><strong>Dirección de Destino:</strong> {{ pedido.direccion_destino }}</p>
+                    <p><strong>Correo de Destino:</strong> {{ pedido.correo_destino }}</p>
                 </div>
+            </div>
+            
+            
+            
             {% else %}
                 <form method="post" action="" class="mt-4">
                     {% csrf_token %}
