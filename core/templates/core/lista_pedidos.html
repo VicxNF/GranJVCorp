@@ -72,7 +72,7 @@
                                 <p class="card-text">Direccion de destino: {{ pedido.direccion_destino }}</p>
                                 <p class="card-text">Nombre del conductor: {{ pedido.nombre_conductor }}</p>
                                 <p class="card-text">Estado: {{ pedido.estado }}</p>
-                                <a href="{% url 'modificar_pedido' pedido.codigo_seguimiento %}" class="btn btn-primary">Modificar</a>
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modificarPedidoModal{{ pedido.codigo_seguimiento }}">Modificar</a>
                                 <a href="{% url 'eliminar_pedido' pedido.codigo_seguimiento %}" class="btn btn-danger">Eliminar</a>
                                 {% if pedido.estado != 'Completado' %}
                                 <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#enviarCorreoModal{{ pedido.codigo_seguimiento }}">Completar Pedido</a>
@@ -150,6 +150,28 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para modificar pedido -->
+<div class="modal fade" id="modificarPedidoModal{{ pedido.codigo_seguimiento }}" tabindex="-1" aria-labelledby="modificarPedidoModalLabel{{ pedido.codigo_seguimiento }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 style="color: white;" class="modal-title" id="modificarPedidoModalLabel{{ pedido.codigo_seguimiento }}">Modificar Pedido {{ pedido.codigo_seguimiento }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'modificar_pedido' pedido.codigo_seguimiento %}" method="post">
+                    {% csrf_token %}
+                    {{ modificar_form|crispy }}
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
 {% endfor %}
 
 

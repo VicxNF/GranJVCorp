@@ -114,7 +114,8 @@ def seguimiento_pedido(request):
 def lista_pedidos(request):
     pedidos = Pedidos.objects.all()
     form = PedidosForm()  # Crear una instancia del formulario vacío
-    return render(request, 'core/lista_pedidos.html', {'pedidos': pedidos, 'form': form})
+    modificar_form = ModificarPedidosForm
+    return render(request, 'core/lista_pedidos.html', {'pedidos': pedidos, 'form': form, 'modificar_form': modificar_form})
 
 class PedidosView(viewsets.ModelViewSet):
     serializer_class = PedidosSerializer
